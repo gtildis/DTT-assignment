@@ -12,13 +12,13 @@ export default {
 	<header class="header">
 		<nav class="nav-container-mobile">
 			<div class="nav-image-mobile">
-				<router-link to="/houses" class="nav-link" v-if="isActive('/houses')">
+				<router-link to="/" class="nav-link" v-if="isActive('/')">
 					<img
 						src="../assets/ic_mobile_navigarion_home_active@3x.png"
 						alt="Home logo"
 					/>
 				</router-link>
-				<router-link to="/houses" class="nav-link" v-else>
+				<router-link to="/" class="nav-link" v-else>
 					<img
 						src="../assets/ic_mobile_navigarion_home@3x.png"
 						alt="Home logo"
@@ -45,10 +45,7 @@ export default {
 				<img src="../assets/img_logo_dtt@3x.png" alt="DTT logo" />
 			</div>
 			<div class="nav-links">
-				<router-link
-					to="/houses"
-					class="nav-link"
-					:class="{ active: isActive('/houses') }"
+				<router-link to="/" class="nav-link" :class="{ active: isActive('/') }"
 					>Houses</router-link
 				>
 				<router-link
@@ -62,7 +59,7 @@ export default {
 	</header>
 </template>
 
-<style scoped>
+<style>
 .header {
 	font-family: "Montserrat", sans-serif;
 	background-color: #ffffff;
@@ -109,6 +106,7 @@ nav img {
 		display: flex;
 		justify-content: space-between;
 		padding: 2rem;
+		z-index: 10;
 	}
 
 	.nav-image-mobile {
@@ -124,6 +122,7 @@ nav img {
 
 	.nav-container-desktop {
 		display: none;
+		z-index: 10;
 	}
 }
 
