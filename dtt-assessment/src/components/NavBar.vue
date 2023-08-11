@@ -59,24 +59,11 @@ export default {
 	</header>
 </template>
 
-<style>
+<style scoped>
 .header {
-	font-family: "Montserrat", sans-serif;
 	background-color: #ffffff;
-	position: fixed;
-	top: 0;
-	left: 0;
 	width: 100%;
 }
-
-.nav-container {
-	max-width: 70%;
-	margin: 0 auto;
-	display: flex;
-	align-items: center;
-	padding: 1rem 0;
-}
-
 nav img {
 	height: 3rem;
 }
@@ -91,6 +78,7 @@ nav img {
 }
 
 .nav-link.active {
+	font-family: "Montserrat", sans-serif;
 	color: #000000;
 	border-radius: 4px;
 	font-weight: 700;
