@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import apiClient from "../services/api";
 import { useRoute, useRouter } from "vue-router";
 import RecommendedHouses from "../components/RecommendedHouses.vue";
+import BackToOverviewLink from "@/components/BackToOverviewLink.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -38,10 +39,7 @@ const editHouse = () => {};
 	<div class="container">
 		<div class="house-details">
 			<div v-if="house" class="house-details-container">
-				<router-link to="/" class="back-to-overview">
-					<img src="../assets/ic_back_grey@3x.png" alt="Back to overview" />
-					<span>Back to overview</span>
-				</router-link>
+				<BackToOverviewLink />
 
 				<div class="card">
 					<img :src="house.image" alt="House Image" />
@@ -140,25 +138,6 @@ const editHouse = () => {};
 }
 .recommended-houses-container {
 	width: 35%;
-}
-
-.back-to-overview {
-	display: flex;
-	align-items: center;
-	text-decoration: none;
-	margin: 2rem 0;
-	color: #000000;
-}
-
-.back-to-overview img {
-	width: 18px;
-	height: 18px;
-	margin-right: 10px;
-}
-
-.back-to-overview span {
-	font-weight: 700;
-	font-family: "Montserrat", sans-serif;
 }
 
 .address {
