@@ -17,6 +17,13 @@ const router = createRouter({
 			// which is lazy-loaded when the route is visited.
 			component: () => import("../views/AboutView.vue"),
 		},
+		{
+			path: "/houses/:houseId",
+			name: "house-details",
+			component: () => import("../views/HouseDetailsView.vue"),
+			props: true,
+			key: (route) => route.params.houseId, // Use the houseId as the key
+		},
 	],
 });
 

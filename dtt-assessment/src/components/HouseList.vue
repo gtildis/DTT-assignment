@@ -11,6 +11,7 @@ onMounted(async () => {
 	try {
 		const response = await apiClient.get("/houses");
 		houses.value = response.data;
+		console.log(houses.value);
 	} catch (error) {
 		console.error("Error fetching houses:", error);
 	}
@@ -21,8 +22,10 @@ watchEffect(() => {
 		searchResults.value = houses.value.filter((house) =>
 			houseMatchesSearchCriteria(house, searchInput.value.toLowerCase())
 		);
+		localStorage.setItem("lastSearchCriteria", searchInput.value);
 	} else {
 		searchResults.value = [];
+		localStorage.setItem("lastSearchCriteria", searchInput.value);
 	}
 });
 
@@ -77,7 +80,7 @@ const sortHouses = () => {
 			<div class="btn-header-container">
 				<button>
 					<img src="../assets/ic_plus_white@3x.png" />
-					<span>CREATE NEW&nbsp;</span>
+					<span>CREATE NEW</span>
 				</button>
 			</div>
 		</div>
@@ -150,10 +153,21 @@ const sortHouses = () => {
 		>
 			<img :src="house.image" :alt="house.address" class="house-image" />
 			<div class="house-details">
-				<span class="house-buttons"><h3>yo</h3> </span>
-				<h2>
-					{{ house.location.street }}&nbsp;{{ house.location.houseNumber }}
-				</h2>
+				<span class="house-buttons"
+					><div class="button-group">
+						<button @click="editHouse">
+							<img src="../assets/ic_edit@3x.png" alt="edit icon" />
+						</button>
+						<button @click="deleteHouse">
+							<img src="../assets/ic_delete@3x.png" alt="delete icon" />
+						</button>
+					</div>
+				</span>
+				<router-link :to="`/houses/${house.id}`"
+					><h2>
+						{{ house.location.street }}&nbsp;{{ house.location.houseNumber }}
+					</h2></router-link
+				>
 
 				<h3 class="house-price">€ {{ house.price }}</h3>
 				<h3 class="house-location">
@@ -192,6 +206,9 @@ const sortHouses = () => {
 	align-items: flex-end;
 }
 
+.btn-header-container span {
+	margin-right: 2rem;
+}
 .header-container button {
 	display: flex;
 	align-items: center;
@@ -206,7 +223,7 @@ const sortHouses = () => {
 .header-container button img {
 	margin-right: 8px;
 	width: 18px;
-	padding: 1rem;
+	padding: 0.5rem 1rem;
 }
 
 .sorting-container {
@@ -241,6 +258,7 @@ const sortHouses = () => {
 	padding: 10px;
 	display: flex;
 	background-color: #ffffff;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
 	margin-top: 1rem;
 }
 
@@ -283,6 +301,10 @@ const sortHouses = () => {
 	width: 18px;
 	height: auto;
 }
+a {
+	text-decoration: none;
+	color: #000000;
+}
 
 h2 {
 	font-family: "Montserrat", sans-serif;
@@ -306,6 +328,7 @@ h3 {
 
 	.button-group {
 		width: 100%;
+		background-color: #ffffff;
 	}
 	.price {
 		flex-grow: 1;
@@ -410,6 +433,11 @@ button {
 	padding: 0.5rem;
 	background-color: #e8e8e8;
 	border-radius: 7px;
+}
+
+.button-group button {
+	background-color: #ffffff;
+	margin: 1rem 0;
 }
 
 .search-results {
