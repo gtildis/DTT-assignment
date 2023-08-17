@@ -1,5 +1,10 @@
+<script setup></script>
+
 <template>
 	<div class="container">
+		<div class="mobile">
+			<h1>About</h1>
+		</div>
 		<div class="about-container">
 			<h1>About DTT Real Estate</h1>
 			<p>
@@ -41,6 +46,9 @@
 	align-items: center;
 	font-family: "Open Sans" sans-serif;
 }
+.mobile {
+	display: none;
+}
 
 h1 {
 	font-family: "Montserrat", sans-serif;
@@ -73,5 +81,47 @@ h1 {
 a {
 	text-decoration: none;
 	color: #067bc2;
+}
+
+@media (max-width: 767px) {
+	span {
+		display: none;
+	}
+
+	.mobile {
+		display: block;
+	}
+
+	.about-container {
+		width: 90%;
+		margin: 0;
+	}
+
+	.mobile h1,
+	.about-container h1 {
+		font-size: 22px;
+		font-weight: 900;
+		font-family: "Mont-serrat", sans-serif;
+	}
+
+	.about-container h1 {
+		font-size: 18px;
+	}
+
+	.about-container p {
+		font-size: 14px;
+		margin: 1rem 0;
+	}
+	.container {
+		height: 100vh;
+	}
+	.logo-container img {
+		height: 30px;
+		margin-right: 1rem;
+	}
+
+	a {
+		font-size: 14px;
+	}
 }
 </style>

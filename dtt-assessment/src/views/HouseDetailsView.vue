@@ -39,7 +39,7 @@ const closeModal = () => {
 	<div class="container">
 		<div class="house-details">
 			<div v-if="house" class="house-details-container">
-				<BackToOverviewLink />
+				<BackToOverviewLink class="back-to-overview" />
 
 				<div class="card">
 					<img :src="house.image" alt="House Image" />
@@ -194,5 +194,27 @@ button {
 	top: 0;
 	right: 0;
 	margin: 2rem 0;
+}
+
+@media (max-width: 767px) {
+	/* Styles for mobile */
+
+	.house-details {
+		width: 100%;
+		flex-direction: column;
+	}
+
+	.house-details-container {
+		width: 100%;
+		border-top-right-radius: 10px;
+	}
+	.recommended-houses-container {
+		width: 90%;
+	}
+	.back-to-overview {
+		position: fixed;
+		top: 1rem;
+		left: 1rem;
+	}
 }
 </style>

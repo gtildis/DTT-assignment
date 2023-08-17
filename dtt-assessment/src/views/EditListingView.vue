@@ -10,8 +10,10 @@ const props = defineProps({
 <template>
 	<div class="container">
 		<div class="form-container">
-			<BackToOverviewLink />
-			<h1>Edit listing</h1>
+			<div class="form-header">
+				<BackToOverviewLink />
+				<h1>Edit listing</h1>
+			</div>
 			<ListingForm
 				submitButtonText="SAVE"
 				:isEdit="true"
@@ -39,5 +41,25 @@ const props = defineProps({
 .form-container h1 {
 	font-family: "Montserrat", sans-serif;
 	font-size: 32px;
+}
+
+@media (max-width: 767px) {
+	/* Styles for mobile */
+	.form-container {
+		width: 90%;
+		margin-bottom: 6rem;
+	}
+	.form-header {
+		display: flex;
+		align-items: center;
+	}
+	.form-header h1 {
+		margin-left: 4rem;
+	}
+
+	.form-header h1 {
+		font-size: 22px;
+		font-weight: 700;
+	}
 }
 </style>

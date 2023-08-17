@@ -26,4 +26,11 @@
 	font-weight: 700;
 	font-family: "Montserrat", sans-serif;
 }
+
+@media (max-width: 767px) {
+	/* Styles for mobile */
+	.back-to-overview span {
+		display: none;
+	}
+}
 </style>

@@ -6,8 +6,10 @@ import ListingForm from "../components/ListingForm.vue";
 <template>
 	<div class="container">
 		<div class="form-container">
-			<BackToOverviewLink />
-			<h1>Create new listing</h1>
+			<div class="form-header">
+				<BackToOverviewLink />
+				<h1>Create new listing</h1>
+			</div>
 			<ListingForm submitButtonText="POST" :isEdit="false" />
 		</div>
 	</div>
@@ -31,5 +33,25 @@ import ListingForm from "../components/ListingForm.vue";
 .form-container h1 {
 	font-family: "Montserrat", sans-serif;
 	font-size: 32px;
+	font-weight: 700;
+}
+
+@media (max-width: 767px) {
+	/* Styles for mobile */
+	.form-container {
+		width: 90%;
+	}
+	.form-header {
+		display: flex;
+		align-items: center;
+	}
+	.form-header h1 {
+		margin-left: 3rem;
+	}
+
+	.form-header h1 {
+		font-size: 22px;
+		font-weight: 700;
+	}
 }
 </style>

@@ -343,6 +343,10 @@ h3 {
 		width: 90%;
 	}
 
+	.house-list {
+		margin-bottom: 7.5rem;
+	}
+
 	.search-container {
 		width: 100%;
 	}

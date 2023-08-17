@@ -39,13 +39,15 @@ const deleteListing = async () => {
 	<div class="modal-overlay">
 		<div class="modal">
 			<div class="modal-details">
-				<h2>Confirm Deletion</h2>
+				<h2>Delete Listing</h2>
 				<p>Are you sure you want to delete this listing?</p>
 				<p>This action cannot be undone.</p>
 				<div class="modal-buttons">
-					<button @click="deleteListing" class="delete-button">Delete</button>
+					<button @click="deleteListing" class="delete-button">
+						YES, DELETE
+					</button>
 					<button @click="closeDeleteModal" class="cancel-button">
-						Cancel
+						CANCEL
 					</button>
 				</div>
 			</div>
@@ -70,7 +72,7 @@ const deleteListing = async () => {
 .modal {
 	background-color: white;
 	padding: 1rem;
-	border-radius: 5px;
+	border-radius: 8px;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 	width: 30%;
 	height: 30%;
@@ -80,7 +82,7 @@ const deleteListing = async () => {
 	justify-content: center;
 }
 .modal-details {
-	width: 70%;
+	width: 80%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -128,5 +130,20 @@ button {
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
+}
+@media (max-width: 767px) {
+	.modal {
+		width: 80%;
+	}
+
+	.modal-details h2 {
+		margin: 2rem;
+	}
+	.modal p {
+		font-size: 14px;
+	}
+	.modal-buttons {
+		width: 65%;
+	}
 }
 </style>

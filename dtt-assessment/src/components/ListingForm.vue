@@ -421,4 +421,12 @@ h4 {
 	display: flex;
 	align-items: center;
 }
+
+@media (max-width: 767px) {
+	/* Styles for mobile */
+	.form-container {
+		width: 100%;
+	}
+	
+}
 </style>
