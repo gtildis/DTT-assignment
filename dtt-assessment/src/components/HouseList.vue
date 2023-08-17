@@ -11,7 +11,6 @@ onMounted(async () => {
 	try {
 		const response = await apiClient.get("/houses");
 		houses.value = response.data;
-		console.log(houses.value);
 	} catch (error) {
 		console.error("Error fetching houses:", error);
 	}
@@ -78,10 +77,12 @@ const sortHouses = () => {
 				<h1>Houses</h1>
 			</div>
 			<div class="btn-header-container">
-				<button>
-					<img src="../assets/ic_plus_white@3x.png" />
-					<span>CREATE NEW</span>
-				</button>
+				<router-link to="/create-listing">
+					<button>
+						<img src="../assets/ic_plus_white@3x.png" />
+						<span>CREATE NEW</span>
+					</button>
+				</router-link>
 			</div>
 		</div>
 		<div class="sorting-container">
@@ -155,9 +156,9 @@ const sortHouses = () => {
 			<div class="house-details">
 				<span class="house-buttons"
 					><div class="button-group">
-						<button @click="editHouse">
+						<router-link :to="`/edit-listing/${house.id}`">
 							<img src="../assets/ic_edit@3x.png" alt="edit icon" />
-						</button>
+						</router-link>
 						<button @click="deleteHouse">
 							<img src="../assets/ic_delete@3x.png" alt="delete icon" />
 						</button>

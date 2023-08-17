@@ -1,3 +1,5 @@
+<script setup></script>
+
 <template>
 	<router-link to="/" class="back-to-overview">
 		<img src="../assets/ic_back_grey@3x.png" alt="Back to overview" />
