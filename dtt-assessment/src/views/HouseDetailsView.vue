@@ -3,7 +3,8 @@ import { ref, onMounted } from "vue";
 import apiClient from "../services/api";
 import { useRoute, useRouter } from "vue-router";
 import RecommendedHouses from "../components/RecommendedHouses.vue";
-import BackToOverviewLink from "@/components/BackToOverviewLink.vue";
+import BackToOverviewLink from "../components/BackToOverviewLink.vue";
+import DeleteListing from "../components/DeleteListing.vue"; // Import the DeleteListing component
 
 const router = useRouter();
 const route = useRoute();
@@ -23,16 +24,15 @@ onMounted(async () => {
 	}
 });
 
-const deleteHouse = async () => {
-	try {
-		await apiClient.delete(`/houses/${house.value.houseId}`);
-		router.push({ name: "home" });
-	} catch (error) {
-		console.error("Error deleting house:", error);
-	}
+const showDeleteModal = ref(false);
+
+const openModal = () => {
+	showDeleteModal.value = true;
 };
 
-const editHouse = () => {};
+const closeModal = () => {
+	showDeleteModal.value = false;
+};
 </script>
 
 <template>
@@ -91,10 +91,10 @@ const editHouse = () => {};
 						<p class="description">{{ house.description }}</p>
 
 						<div class="button-group">
-							<button @click="editHouse">
+							<router-link :to="`/edit-listing/${house.id}`">
 								<img src="../assets/ic_edit@3x.png" alt="edit icon" />
-							</button>
-							<button @click="deleteHouse">
+							</router-link>
+							<button @click="openModal">
 								<img src="../assets/ic_delete@3x.png" alt="delete icon" />
 							</button>
 						</div>
@@ -105,6 +105,11 @@ const editHouse = () => {};
 				<RecommendedHouses />
 			</div>
 		</div>
+		<DeleteListing
+			v-if="showDeleteModal"
+			:showDeleteModal="showDeleteModal"
+			@closeModal="closeModal"
+		/>
 	</div>
 </template>
 

@@ -1,11 +1,13 @@
 <script setup>
 import { ref, onMounted, watchEffect } from "vue";
 import apiClient from "../services/api";
+import DeleteListing from "./DeleteListing.vue";
 
 const houses = ref([]);
 const searchInput = ref("");
 const searchResults = ref([]);
 let isNotValid = ref(false);
+const currentHouseId = ref("");
 
 onMounted(async () => {
 	try {
@@ -67,6 +69,18 @@ const sortHouses = () => {
 	});
 
 	searchResults.value = sortedHouses;
+};
+
+const showDeleteModal = ref(false);
+
+const openModal = (houseId) => {
+	showDeleteModal.value = true;
+	currentHouseId.value = houseId;
+	console.log(currentHouseId);
+};
+
+const closeModal = () => {
+	showDeleteModal.value = false;
 };
 </script>
 
@@ -159,7 +173,7 @@ const sortHouses = () => {
 						<router-link :to="`/edit-listing/${house.id}`">
 							<img src="../assets/ic_edit@3x.png" alt="edit icon" />
 						</router-link>
-						<button @click="deleteHouse">
+						<button @click="openModal(house.id)">
 							<img src="../assets/ic_delete@3x.png" alt="delete icon" />
 						</button>
 					</div>
@@ -185,6 +199,12 @@ const sortHouses = () => {
 				</div>
 			</div>
 		</div>
+		<DeleteListing
+			v-if="showDeleteModal"
+			:showDeleteModal="showDeleteModal"
+			@closeModal="closeModal"
+			:currentHouseId="currentHouseId"
+		/>
 	</div>
 </template>
 

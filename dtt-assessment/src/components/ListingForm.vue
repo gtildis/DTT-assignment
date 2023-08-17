@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { defineProps } from "vue";
 import { createListing, editListing } from "../services/listingService";
 import apiClient from "../services/api";
@@ -27,6 +27,8 @@ const hasGarage = ref(false);
 const previewImage = ref(null);
 
 const router = useRouter();
+const route = useRoute();
+console.log(route.params);
 
 const house = ref(null);
 
@@ -115,10 +117,15 @@ const handleSubmit = async () => {
 				);
 			}
 		}
-
-		router.push({
-			name: "home",
-		});
+		if (props.isEdit) {
+			router.push({
+				path: `/houses/${route.params.listingId}`,
+			});
+		} else {
+			router.push({
+				path: `/houses/${response.id}`,
+			});
+		}
 	} catch (error) {
 		console.error("Error:", error);
 	}
