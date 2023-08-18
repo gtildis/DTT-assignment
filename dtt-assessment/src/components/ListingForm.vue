@@ -222,8 +222,8 @@ const clearImage = () => {
 			</div>
 			<label>
 				<div class="single">
-					<div class="half">
-						<h4 class="imam">Upload picture (PNG or JPG)*</h4>
+					<div class="half image-input-container">
+						<h4>Upload picture (PNG or JPG)*</h4>
 						<input
 							@change="handleImageChange"
 							id="image-input"
@@ -313,7 +313,7 @@ const clearImage = () => {
 					required
 				></textarea>
 			</div>
-			<div class="double btn">
+			<div class="double btn-container">
 				<button class="half button" type="submit">
 					{{ submitButtonText }}
 				</button>
@@ -377,11 +377,13 @@ const clearImage = () => {
 	border-color: #555;
 }
 
-.image-input {
+.image-input-container {
 	position: relative;
 }
 .clear-button {
 	position: absolute;
+	top: 3.5rem;
+	right: 2rem;
 	width: 20px;
 	height: 20px;
 	background-color: #ccc;
@@ -404,7 +406,7 @@ h4 {
 	font-family: "Montserrat", sans-serif;
 	font-size: 16dpx;
 }
-.btn {
+.btn-container {
 	display: flex;
 	justify-content: flex-end;
 }
@@ -427,6 +429,23 @@ h4 {
 	.form-container {
 		width: 100%;
 	}
-	
+	.btn-container {
+		justify-content: center;
+	}
+	.button {
+		width: 100%;
+		margin: 1rem 0;
+	}
+	.single input,
+	.double input,
+	.single textarea,
+	.double select {
+		margin-right: 1rem;
+	}
+	.clear-button {
+		position: absolute;
+		top: 4rem;
+		right: -1rem;
+	}
 }
 </style>

@@ -4,7 +4,7 @@ import apiClient from "../services/api";
 import { useRoute, useRouter } from "vue-router";
 import RecommendedHouses from "../components/RecommendedHouses.vue";
 import BackToOverviewLink from "../components/BackToOverviewLink.vue";
-import DeleteListing from "../components/DeleteListing.vue"; // Import the DeleteListing component
+import DeleteListing from "../components/DeleteListing.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -39,7 +39,8 @@ const closeModal = () => {
 	<div class="container">
 		<div class="house-details">
 			<div v-if="house" class="house-details-container">
-				<BackToOverviewLink class="back-to-overview" />
+				<BackToOverviewLink class="back-to-overview-mobile" />
+				<BackToOverviewLink />
 
 				<div class="card">
 					<img :src="house.image" alt="House Image" />
@@ -51,6 +52,11 @@ const closeModal = () => {
 						</div>
 
 						<div class="card-description">
+							<span class="card-title-mobile">
+								<h2 class="address">
+									{{ house.location.street }} {{ house.location.houseNumber }}
+								</h2>
+							</span>
 							<div class="location">
 								<img src="../assets/ic_location@3x.png" alt="location icon" />
 								<p>
@@ -96,6 +102,14 @@ const closeModal = () => {
 							</router-link>
 							<button @click="openModal">
 								<img src="../assets/ic_delete@3x.png" alt="delete icon" />
+							</button>
+						</div>
+						<div class="button-group-mobile">
+							<router-link :to="`/edit-listing/${house.id}`">
+								<img src="../assets/ic_edit_white@3x.png" alt="edit icon" />
+							</router-link>
+							<button @click="openModal">
+								<img src="../assets/ic_delete_white@3x.png" alt="delete icon" />
 							</button>
 						</div>
 					</div>
@@ -166,6 +180,7 @@ const closeModal = () => {
 button {
 	border: none;
 	background-color: transparent;
+	cursor: pointer;
 }
 
 .house-description {
@@ -196,12 +211,63 @@ button {
 	margin: 2rem 0;
 }
 
+.button-group-mobile {
+	display: none;
+	position: absolute;
+	top: 2rem;
+	right: 1rem;
+	margin: 2rem 0;
+}
+.back-to-overview-mobile {
+	display: none;
+}
+
 @media (max-width: 767px) {
 	/* Styles for mobile */
 
 	.house-details {
 		width: 100%;
 		flex-direction: column;
+	}
+	.button-group {
+		display: none;
+	}
+	.button-group-mobile {
+		display: block;
+		z-index: 10;
+	}
+
+	.card-details {
+		position: inherit;
+	}
+	.card-description {
+		position: relative;
+	}
+	.card-title-mobile {
+		border-top-right-radius: 35px;
+		border-top-left-radius: 35px;
+		background-color: white;
+		/* padding: 1rem; */
+		position: absolute;
+		top: -4.5rem;
+		left: -2rem;
+		width: 97vw;
+		text-align: left;
+	}
+	.card-details img {
+		margin-right: 0.3rem;
+	}
+	.house-description {
+		width: 100%;
+	}
+	.card-title-mobile h2 {
+		margin-left: 2rem;
+	}
+	.card-title {
+		display: none;
+	}
+	.card img {
+		position: relative;
 	}
 
 	.house-details-container {
@@ -211,10 +277,26 @@ button {
 	.recommended-houses-container {
 		width: 90%;
 	}
+	.house-item-container {
+		width: 100%;
+		margin-left: 1rem;
+		margin-top: 0rem;
+	}
+
 	.back-to-overview {
+		display: none;
+	}
+	.back-to-overview-mobile {
+		display: block;
 		position: fixed;
-		top: 1rem;
-		left: 1rem;
+		top: 2rem;
+		left: 2rem;
+		z-index: 1;
+	}
+
+	.house-description p {
+		font-size: 14px;
+		margin: 0.3rem;
 	}
 }
 </style>

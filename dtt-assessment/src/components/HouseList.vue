@@ -93,7 +93,8 @@ const closeModal = () => {
 			<div class="btn-header-container">
 				<router-link to="/create-listing">
 					<button>
-						<img src="../assets/ic_plus_white@3x.png" />
+						<img src="../assets/ic_plus_white@3x.png" class="desktop" />
+						<img src="../assets/ic_plus_grey@3x.png" class="mobile" />
 						<span>CREATE NEW</span>
 					</button>
 				</router-link>
@@ -246,6 +247,9 @@ const closeModal = () => {
 	width: 18px;
 	padding: 0.5rem 1rem;
 }
+.mobile {
+	display: none;
+}
 
 .sorting-container {
 	display: flex;
@@ -347,6 +351,14 @@ h3 {
 		margin-bottom: 7.5rem;
 	}
 
+	.desktop {
+		display: none;
+	}
+	.mobile {
+		display: block;
+		/* background-color: #c3c3c3; */
+	}
+
 	.search-container {
 		width: 100%;
 	}
@@ -354,6 +366,12 @@ h3 {
 	.button-group {
 		width: 100%;
 		background-color: #ffffff;
+	}
+	.header-container button img {
+		margin-right: 0;
+	}
+	.header-container button {
+		background-color: transparent;
 	}
 	.price {
 		flex-grow: 1;
@@ -444,7 +462,7 @@ input {
 	margin: 0 0.5rem;
 	padding: 0.5rem;
 	border: none;
-	background-color: #e8e8e8; /* Added red background color */
+	background-color: #e8e8e8;
 }
 
 .input-search {
@@ -454,7 +472,8 @@ input {
 
 button {
 	border: none;
-	align-self: flex-end; /* Changed justify-self to align-self */
+	align-self: flex-end;
+	cursor: pointer;
 	padding: 0.5rem;
 	background-color: #e8e8e8;
 	border-radius: 7px;

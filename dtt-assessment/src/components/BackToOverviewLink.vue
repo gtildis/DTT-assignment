@@ -2,7 +2,16 @@
 
 <template>
 	<router-link to="/" class="back-to-overview">
-		<img src="../assets/ic_back_grey@3x.png" alt="Back to overview" />
+		<img
+			src="../assets/ic_back_white@3x.png"
+			alt="Back to overview"
+			class="mobile"
+		/>
+		<img
+			src="../assets/ic_back_grey@3x.png"
+			alt="Back to overview"
+			class="desktop"
+		/>
 		<span>Back to overview</span>
 	</router-link>
 </template>
@@ -26,10 +35,19 @@
 	font-weight: 700;
 	font-family: "Montserrat", sans-serif;
 }
+.mobile {
+	display: none;
+}
 
 @media (max-width: 767px) {
 	/* Styles for mobile */
 	.back-to-overview span {
+		display: none;
+	}
+	.mobile {
+		display: block;
+	}
+	.desktop {
 		display: none;
 	}
 }

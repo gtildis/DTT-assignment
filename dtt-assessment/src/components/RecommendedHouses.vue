@@ -139,4 +139,16 @@ a {
 	text-decoration: none;
 	color: black;
 }
+@media (max-width: 767px) {
+	.house-details h2 {
+		font-size: 16px;
+	}
+	.house-details h3 {
+		font-size: 14px;
+		margin: 1rem 0;
+	}
+	.recommended-title {
+		font-size: 18px;
+	}
+}
 </style>
