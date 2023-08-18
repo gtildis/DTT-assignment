@@ -3,7 +3,7 @@ import BackToOverviewLink from "../components/BackToOverviewLink.vue";
 import ListingForm from "../components/ListingForm.vue";
 
 const props = defineProps({
-	listingId: String, // Change the type if needed
+	listingId: String,
 });
 </script>
 

@@ -176,6 +176,9 @@ const closeModal = () => {
 	width: 8rem;
 	height: 8rem;
 }
+.card-title-mobile {
+	display: none;
+}
 
 button {
 	border: none;
@@ -242,6 +245,9 @@ button {
 	}
 	.card-description {
 		position: relative;
+	}
+	.card-title-mobile {
+		display: block;
 	}
 	.card-title-mobile {
 		border-top-right-radius: 35px;
