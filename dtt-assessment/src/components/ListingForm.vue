@@ -371,6 +371,9 @@ const clearImage = () => {
 #image-input::-webkit-file-upload-button {
 	visibility: hidden;
 }
+#image-input::file-selector-button {
+	display: none;
+}
 
 /* Optional: Style the dashed border when hovering */
 #image-input:hover {
