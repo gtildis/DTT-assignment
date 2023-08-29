@@ -192,7 +192,7 @@ const closeModal = () => {
 					</div>
 				</div>
 			</router-link>
-			<span class="house-buttons">
+			<span v-if="house.madeByMe" class="house-buttons">
 				<div class="button-group">
 					<router-link :to="`/edit-listing/${house.id}`">
 						<img src="../assets/ic_edit@3x.png" alt="edit icon" />
