@@ -229,6 +229,7 @@ const clearImage = () => {
 							type="file"
 							accept="image/*"
 							class="image-input"
+							required
 						/>
 						<button
 							v-if="previewImage"

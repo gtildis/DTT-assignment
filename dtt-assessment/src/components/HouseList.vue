@@ -1,32 +1,28 @@
 <script setup>
-import { ref, onMounted, watchEffect } from "vue";
-import apiClient from "../services/api";
+import { ref, onMounted, computed } from "vue";
 import DeleteListing from "./DeleteListing.vue";
 
-const houses = ref([]);
+import { useGlobalStore } from "../store/store";
+
+const globalStore = useGlobalStore();
+
 const searchInput = ref("");
-const searchResults = ref([]);
+
 let isNotValid = ref(false);
 const currentHouseId = ref("");
 
-onMounted(async () => {
-	try {
-		const response = await apiClient.get("/houses");
-		houses.value = response.data;
-	} catch (error) {
-		console.error("Error fetching houses:", error);
-	}
+onMounted(() => {
+	globalStore.fetchHouses();
 });
-// Watch for changes in the search query and update searchResults accordingly
-watchEffect(() => {
+const houses = computed(() => globalStore.houses);
+
+const searchResults = computed(() => {
 	if (searchInput.value) {
-		searchResults.value = houses.value.filter((house) =>
+		return houses.value.filter((house) =>
 			houseMatchesSearchCriteria(house, searchInput.value.toLowerCase())
 		);
-		localStorage.setItem("lastSearchCriteria", searchInput.value);
 	} else {
-		searchResults.value = [];
-		localStorage.setItem("lastSearchCriteria", searchInput.value);
+		return [];
 	}
 });
 

@@ -1,33 +1,28 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import apiClient from "../services/api";
+import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import RecommendedHouses from "../components/RecommendedHouses.vue";
 import BackToOverviewLink from "../components/BackToOverviewLink.vue";
 import DeleteListing from "../components/DeleteListing.vue";
+import { useGlobalStore } from "../store/store";
 
+const globalStore = useGlobalStore();
 const router = useRouter();
 const route = useRoute();
+const currentHouseId = ref(null);
 
-const house = ref(null);
+const houseId = route.params.houseId;
+const house = computed(() => globalStore.houseDetails);
 
-onMounted(async () => {
-	try {
-		const response = await apiClient.get(`/houses/${route.params.houseId}`);
-		house.value = response.data[0];
-	} catch (error) {
-		if (error.response && error.response.status === 404) {
-			console.error("House not found:", error);
-		} else {
-			console.error("Error fetching house details:", error);
-		}
-	}
+onMounted(() => {
+	globalStore.fetchHouseDetails(houseId);
 });
 
 const showDeleteModal = ref(false);
 
-const openModal = () => {
+const openModal = (houseId) => {
 	showDeleteModal.value = true;
+	currentHouseId.value = houseId;
 };
 
 const closeModal = () => {
@@ -108,7 +103,7 @@ const closeModal = () => {
 							<router-link :to="`/edit-listing/${house.id}`">
 								<img src="../assets/ic_edit_white@3x.png" alt="edit icon" />
 							</router-link>
-							<button @click="openModal">
+							<button @click="openModal(house.id)">
 								<img src="../assets/ic_delete_white@3x.png" alt="delete icon" />
 							</button>
 						</div>
@@ -123,6 +118,7 @@ const closeModal = () => {
 			v-if="showDeleteModal"
 			:showDeleteModal="showDeleteModal"
 			@closeModal="closeModal"
+			:currentHouseId="house.id"
 		/>
 	</div>
 </template>

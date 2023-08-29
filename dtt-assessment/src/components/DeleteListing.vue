@@ -1,10 +1,7 @@
 <script setup>
 import { defineProps, defineEmits } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import apiClient from "../services/api";
-
-const route = useRoute();
-const router = useRouter();
+import { useGlobalStore } from "../store/store";
+import { useRouter } from "vue-router";
 
 const props = defineProps({
 	showDeleteModal: Boolean,
@@ -12,6 +9,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits();
+const globalStore = useGlobalStore();
+const router = useRouter();
 
 const closeDeleteModal = () => {
 	emit("closeModal");
@@ -19,19 +18,14 @@ const closeDeleteModal = () => {
 
 const deleteListing = async () => {
 	try {
-		if (route.params) {
-			await apiClient.delete(`/houses/${route.params.houseId}`);
-			router.push({ name: "home" });
-		} else {
-			await apiClient.delete(`/houses/${props.currentHouseId}`);
-			router.push({ name: "home" });
-			window.location.reload();
+		if (props.currentHouseId) {
+			await globalStore.deleteHouse(props.currentHouseId);
+			closeDeleteModal();
+			router.push({ name: "home" }); // Navigate back to home
 		}
 	} catch (error) {
 		console.error("Error deleting house:", error);
 	}
-
-	closeDeleteModal();
 };
 </script>
 
