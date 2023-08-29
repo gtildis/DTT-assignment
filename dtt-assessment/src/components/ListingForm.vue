@@ -28,7 +28,6 @@ const previewImage = ref(null);
 
 const router = useRouter();
 const route = useRoute();
-console.log(route.params);
 
 const house = ref(null);
 
@@ -91,7 +90,7 @@ const handleSubmit = async () => {
 			constructionYear: constructionYear.value,
 			hasGarage: hasGarage.value,
 		};
-		console.log(props.listingId);
+
 		let response;
 		if (props.isEdit) {
 			response = await editListing(props.listingId, formDataObject);

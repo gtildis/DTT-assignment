@@ -76,7 +76,6 @@ const showDeleteModal = ref(false);
 const openModal = (houseId) => {
 	showDeleteModal.value = true;
 	currentHouseId.value = houseId;
-	console.log(currentHouseId);
 };
 
 const closeModal = () => {
@@ -156,50 +155,55 @@ const closeModal = () => {
 				<p>{{ searchResults.length }} results found</p>
 			</div>
 		</div>
+
+		<!-- <router-link :to="`/houses/${house.id}`"></router-link> -->
 		<div v-if="searchInput && searchResults.length === 0" class="no-results">
 			<img src="../assets/img_empty_houses@3x.png" alt="no results image" />
 			<p>No results found.</p>
 			<p>Please try another keyword.</p>
 		</div>
+
 		<div
 			v-else
 			v-for="house in searchResults.length > 0 ? searchResults : houses"
 			:key="house.id"
-			class="house-item"
+			class="house-item-container"
 		>
-			<img :src="house.image" :alt="house.address" class="house-image" />
-			<div class="house-details">
-				<span class="house-buttons"
-					><div class="button-group">
-						<router-link :to="`/edit-listing/${house.id}`">
-							<img src="../assets/ic_edit@3x.png" alt="edit icon" />
-						</router-link>
-						<button @click="openModal(house.id)">
-							<img src="../assets/ic_delete@3x.png" alt="delete icon" />
-						</button>
-					</div>
-				</span>
-				<router-link :to="`/houses/${house.id}`"
-					><h2>
+			<router-link :to="`/houses/${house.id}`" class="house-item">
+				<img :src="house.image" :alt="house.address" class="house-image" />
+
+				<div class="house-details">
+					<h2>
 						{{ house.location.street }}&nbsp;{{ house.location.houseNumber }}
-					</h2></router-link
-				>
+					</h2>
 
-				<h3 class="house-price">€ {{ house.price }}</h3>
-				<h3 class="house-location">
-					{{ house.location.zip }} {{ house.location.city }}
-				</h3>
-				<div class="house-specs">
-					<img src="../assets/ic_bed@3x.png" alt="bed" />
-					<h3>{{ house.rooms.bedrooms }}</h3>
+					<h3 class="house-price">€ {{ house.price }}</h3>
+					<h3 class="house-location">
+						{{ house.location.zip }} {{ house.location.city }}
+					</h3>
+					<div class="house-specs">
+						<img src="../assets/ic_bed@3x.png" alt="bed" />
+						<h3>{{ house.rooms.bedrooms }}</h3>
 
-					<img src="../assets/ic_bath@3x.png" alt="bed" />
-					<h3>{{ house.rooms.bathrooms }}</h3>
-					<img src="../assets/ic_size@3x.png" alt="bed" />
-					<h3>{{ house.size }} m2</h3>
+						<img src="../assets/ic_bath@3x.png" alt="bed" />
+						<h3>{{ house.rooms.bathrooms }}</h3>
+						<img src="../assets/ic_size@3x.png" alt="bed" />
+						<h3>{{ house.size }} m2</h3>
+					</div>
 				</div>
-			</div>
+			</router-link>
+			<span class="house-buttons">
+				<div class="button-group">
+					<router-link :to="`/edit-listing/${house.id}`">
+						<img src="../assets/ic_edit@3x.png" alt="edit icon" />
+					</router-link>
+					<button @click="openModal(house.id)">
+						<img src="../assets/ic_delete@3x.png" alt="delete icon" />
+					</button>
+				</div>
+			</span>
 		</div>
+
 		<DeleteListing
 			v-if="showDeleteModal"
 			:showDeleteModal="showDeleteModal"
@@ -274,9 +278,15 @@ const closeModal = () => {
 	flex-direction: column;
 }
 
-.house-item {
+.house-item-container {
 	position: relative;
 	width: 70%;
+	display: flex;
+	align-items: center;
+}
+
+.house-item {
+	width: 100%;
 	display: flex;
 	align-content: space-between;
 	border-radius: 10px;
@@ -297,7 +307,7 @@ const closeModal = () => {
 
 .house-buttons {
 	position: absolute;
-	top: 0;
+	top: 1rem;
 	right: 1rem;
 }
 
@@ -365,7 +375,6 @@ h3 {
 
 	.button-group {
 		width: 100%;
-		background-color: #ffffff;
 	}
 	.header-container button img {
 		margin-right: 0;
@@ -415,6 +424,12 @@ h3 {
 	.house-details {
 		margin: 0;
 		line-height: 20%;
+	}
+	.house-item-container {
+		width: 90%;
+	}
+	.house-item {
+		width: 100%;
 	}
 
 	.house-price {
