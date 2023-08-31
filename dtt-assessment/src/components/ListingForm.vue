@@ -36,7 +36,6 @@ if (props.isEdit) {
 		try {
 			const response = await apiClient.get(`/houses/${props.listingId}`);
 			house.value = response.data[0];
-
 			// Update the values cause isEdit
 			streetName.value = house.value.location.street;
 			houseNumber.value = house.value.location.houseNumber;
@@ -50,10 +49,19 @@ if (props.isEdit) {
 			bathrooms.value = house.value.rooms.bathrooms;
 			constructionYear.value = house.value.constructionYear;
 			hasGarage.value = house.value.hasGarage;
+			previewImage.value = house.value.image;
 		} catch (error) {
 			console.error("Error fetching house:", error);
 		}
 	});
+}
+if (previewImage.value !== "") {
+	const imageInput = document.getElementById("image-input");
+	if (imageInput) {
+		imageInput.style.backgroundImage = `url(${previewImage.value})`;
+		imageInput.style.backgroundSize = "cover";
+		imageInput.style.border = "none";
+	}
 }
 
 const handleSubmit = async () => {
@@ -132,6 +140,7 @@ const handleSubmit = async () => {
 
 const handleImageChange = (event) => {
 	const file = event.target.files[0];
+
 	if (file) {
 		previewImage.value = URL.createObjectURL(file);
 
@@ -151,6 +160,7 @@ const handleImageChange = (event) => {
 		}
 	}
 };
+
 const clearImage = () => {
 	if (props.isEdit) {
 		router.replace({
@@ -230,6 +240,13 @@ const clearImage = () => {
 							accept="image/*"
 							class="image-input"
 							required
+							:style="{
+								backgroundImage: previewImage
+									? `url(${previewImage})`
+									: `url('../assets/ic_upload@3x.png')`,
+								backgroundSize: 'cover',
+								border: 'none',
+							}"
 						/>
 						<button
 							v-if="previewImage"

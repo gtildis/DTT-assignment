@@ -33,7 +33,7 @@ const props = defineProps({
 	background-position: center;
 	display: flex;
 	justify-content: center;
-	margin-top: 2rem;
+	margin-top: 5em;
 }
 .form-container {
 	width: 70%;

@@ -25,7 +25,7 @@ import ListingForm from "../components/ListingForm.vue";
 	background-position: center;
 	display: flex;
 	justify-content: center;
-	margin-top: 2rem;
+	margin-top: 5rem;
 }
 .form-container {
 	width: 70%;

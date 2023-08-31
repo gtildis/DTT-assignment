@@ -5,6 +5,8 @@ export const useGlobalStore = defineStore("global", {
 	state: () => ({
 		houseDetails: null,
 		houses: [],
+		recommendedHouses: [],
+		city: "",
 	}),
 
 	actions: {

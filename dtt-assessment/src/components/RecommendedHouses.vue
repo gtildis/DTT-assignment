@@ -1,72 +1,60 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import apiClient from "../services/api";
-import { defineProps } from "vue";
 
 import { useGlobalStore } from "../store/store";
 
 const globalStore = useGlobalStore();
 
-const props = defineProps({
-	city: String,
-});
-
-const recommendedHouses = ref([]);
-
-onMounted(async () => {
-	await globalStore.fetchHouses();
-
-	const houses = computed(() => globalStore.houses);
-	recommendedHouses.value = houses.value.filter(
-		(house) =>
-			house.location.street.toLowerCase().includes(props.city) ||
-			house.location.zip.toLowerCase().includes(props.city) ||
-			house.location.city.toLowerCase().includes(props.city)
-	);
-
-	console.log(recommendedHouses.value);
-});
+const recommendedHouses = computed(() =>
+	globalStore.houses.filter((house) =>
+		house.location.city.toLowerCase().includes(globalStore.city.toLowerCase())
+	)
+);
 </script>
 
 <template>
-	<div v-if="recommendedHouses" class="house-item-container">
-		<h1 class="recommended-title">Recommended for you</h1>
-		<div v-for="house in recommendedHouses" :key="house.id" class="house-item">
-			<img
-				:src="house.image"
-				:alt="house.address"
-				class="recommended-house-image"
-			/>
-			<div class="house-details">
-				<a :href="`/houses/${house.id}`">
-					<h2 class="house-details-title">
-						{{ house.location.street }} {{ house.location.houseNumber }}
+	<div class="recommended-houses">
+		<div v-for="house in recommendedHouses" class="house-item-container">
+			<router-link :to="`/houses/${house.id}`" class="house-item">
+				<img
+					:src="house.image"
+					:alt="house.address"
+					class="recommended-house-image"
+				/>
+
+				<div class="house-details">
+					<h2>
+						{{ house.location.street }}&nbsp;{{ house.location.houseNumber }}
 					</h2>
-				</a>
-				<h3 class="house-price">€ {{ house.price }}</h3>
-				<h3 class="house-location">
-					{{ house.location.zip }} {{ house.location.city }}
-				</h3>
-				<div class="house-specs">
-					<img src="../assets/ic_bed@3x.png" alt="bed" />
-					<h3>{{ house.rooms.bedrooms }}</h3>
-					<img src="../assets/ic_bath@3x.png" alt="bed" />
-					<h3>{{ house.rooms.bathrooms }}</h3>
-					<img src="../assets/ic_size@3x.png" alt="bed" />
-					<h3>{{ house.size }} m2</h3>
+
+					<h3 class="house-price">€ {{ house.price }}</h3>
+					<h3 class="house-location">
+						{{ house.location.zip }} {{ house.location.city }}
+					</h3>
+					<div class="house-specs">
+						<img src="../assets/ic_bed@3x.png" alt="bed" />
+						<h3>{{ house.rooms.bedrooms }}</h3>
+
+						<img src="../assets/ic_bath@3x.png" alt="bed" />
+						<h3>{{ house.rooms.bathrooms }}</h3>
+						<img src="../assets/ic_size@3x.png" alt="bed" />
+						<h3>{{ house.size }} m2</h3>
+					</div>
 				</div>
-			</div>
+			</router-link>
 		</div>
 	</div>
 </template>
 
 <style scoped>
+.recommended-houses {
+	margin-top: 4.5rem;
+}
 .house-item-container {
 	width: 90%;
 	display: flex;
 	flex-direction: column;
-	margin-left: 5rem;
-	margin-top: 4rem;
+	margin-left: 4rem;
 }
 .house-item {
 	display: flex;
@@ -140,6 +128,9 @@ a {
 	color: black;
 }
 @media (max-width: 767px) {
+	.recommended-houses {
+		margin-top: 0;
+	}
 	.container {
 		margin-top: 0;
 	}

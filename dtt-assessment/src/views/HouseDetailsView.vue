@@ -13,10 +13,12 @@ const currentHouseId = ref(null);
 
 const houseId = route.params.houseId;
 const house = computed(() => globalStore.houseDetails);
-const city = computed(() => (house.value ? house.value.location.city : ""));
 
-onMounted(() => {
-	globalStore.fetchHouseDetails(houseId);
+onMounted(async () => {
+	await globalStore.fetchHouseDetails(houseId);
+
+	globalStore.city = computed(() => globalStore.houseDetails.location.city);
+	console.log(globalStore.city);
 });
 
 const showDeleteModal = ref(false);
