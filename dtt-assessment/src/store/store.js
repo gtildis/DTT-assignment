@@ -6,6 +6,7 @@ export const useGlobalStore = defineStore("global", {
 		houseDetails: null,
 		houses: [],
 	}),
+
 	actions: {
 		async fetchHouseDetails(houseId) {
 			try {

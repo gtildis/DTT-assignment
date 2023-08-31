@@ -45,6 +45,7 @@
 	flex-direction: column;
 	align-items: center;
 	font-family: "Open Sans" sans-serif;
+	margin-top: 5rem;
 }
 .mobile {
 	display: none;
@@ -86,6 +87,9 @@ a {
 @media (max-width: 767px) {
 	span {
 		display: none;
+	}
+	.container {
+		margin-top: 0rem;
 	}
 
 	.mobile {

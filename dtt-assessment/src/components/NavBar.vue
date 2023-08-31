@@ -41,29 +41,47 @@ export default {
 			</div>
 		</nav>
 		<nav class="nav-container-desktop">
-			<div>
-				<img src="../assets/img_logo_dtt@3x.png" alt="DTT logo" />
-			</div>
-			<div class="nav-links">
-				<router-link to="/" class="nav-link" :class="{ active: isActive('/') }"
-					>Houses</router-link
-				>
-				<router-link
-					to="/about"
-					class="nav-link"
-					:class="{ active: isActive('/about') }"
-					>About</router-link
-				>
+			<div class="nav-desktop">
+				<div>
+					<img src="../assets/img_logo_dtt@3x.png" alt="DTT logo" />
+				</div>
+				<div class="nav-links">
+					<router-link
+						to="/"
+						class="nav-link"
+						:class="{ active: isActive('/') }"
+						>Houses</router-link
+					>
+					<router-link
+						to="/about"
+						class="nav-link"
+						:class="{ active: isActive('/about') }"
+						>About</router-link
+					>
+				</div>
 			</div>
 		</nav>
 	</header>
 </template>
 
 <style scoped>
-.header {
+.nav-container-desktop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 10;
 	background-color: #ffffff;
-	width: 100%;
+	min-width: 100vw;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
+.nav-desktop {
+	width: 70%;
+	display: flex;
+	align-items: center;
+}
+
 nav img {
 	height: 3rem;
 }

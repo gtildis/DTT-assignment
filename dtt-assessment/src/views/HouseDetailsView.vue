@@ -13,6 +13,7 @@ const currentHouseId = ref(null);
 
 const houseId = route.params.houseId;
 const house = computed(() => globalStore.houseDetails);
+const city = computed(() => (house.value ? house.value.location.city : ""));
 
 onMounted(() => {
 	globalStore.fetchHouseDetails(houseId);
@@ -111,7 +112,7 @@ const closeModal = () => {
 				</div>
 			</div>
 			<div class="recommended-houses-container">
-				<RecommendedHouses />
+				<RecommendedHouses :city="city" />
 			</div>
 		</div>
 		<DeleteListing
@@ -131,6 +132,7 @@ const closeModal = () => {
 	background-color: #f6f6f6;
 	display: flex;
 	justify-content: center;
+	margin-top: 5rem;
 }
 .card {
 	background-color: #ffffff;
@@ -223,6 +225,9 @@ button {
 
 @media (max-width: 767px) {
 	/* Styles for mobile */
+	.container {
+		margin-top: 0;
+	}
 
 	.house-details {
 		width: 100%;

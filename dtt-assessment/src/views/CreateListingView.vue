@@ -25,6 +25,7 @@ import ListingForm from "../components/ListingForm.vue";
 	background-position: center;
 	display: flex;
 	justify-content: center;
+	margin-top: 2rem;
 }
 .form-container {
 	width: 70%;
@@ -38,6 +39,11 @@ import ListingForm from "../components/ListingForm.vue";
 
 @media (max-width: 767px) {
 	/* Styles for mobile */
+
+	.container {
+		margin-bottom: 6rem;
+		margin-top: 0;
+	}
 	.form-container {
 		width: 90%;
 	}

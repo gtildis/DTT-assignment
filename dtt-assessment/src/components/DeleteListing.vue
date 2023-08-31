@@ -21,7 +21,7 @@ const deleteListing = async () => {
 		if (props.currentHouseId) {
 			await globalStore.deleteHouse(props.currentHouseId);
 			closeDeleteModal();
-			router.push({ name: "home" }); // Navigate back to home
+			router.push({ name: "home" });
 		}
 	} catch (error) {
 		console.error("Error deleting house:", error);

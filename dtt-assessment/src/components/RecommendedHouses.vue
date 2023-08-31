@@ -1,33 +1,33 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import apiClient from "../services/api";
+import { defineProps } from "vue";
 
-const lastSearchCriteria = localStorage.getItem("lastSearchCriteria");
-const recommendedHouses = ref([]);
-const searchResults = ref([]);
+import { useGlobalStore } from "../store/store";
 
-onMounted(async () => {
-	fetchAllHouses();
+const globalStore = useGlobalStore();
+
+const props = defineProps({
+	city: String,
 });
 
-async function fetchAllHouses() {
-	try {
-		const response = await apiClient.get("/houses");
-		searchResults.value = response.data;
+const recommendedHouses = ref([]);
 
-		// Filter recommended houses based on the last search criteria
+onMounted(async () => {
+	await globalStore.fetchHouses();
 
-		recommendedHouses.value = searchResults.value.filter(
-			(house) =>
-				house.location.street.toLowerCase().includes(lastSearchCriteria) ||
-				house.location.zip.toLowerCase().includes(lastSearchCriteria) ||
-				house.location.city.toLowerCase().includes(lastSearchCriteria)
-		);
-	} catch (error) {
-		console.error("Error fetching houses:", error);
-	}
-}
+	const houses = computed(() => globalStore.houses);
+	recommendedHouses.value = houses.value.filter(
+		(house) =>
+			house.location.street.toLowerCase().includes(props.city) ||
+			house.location.zip.toLowerCase().includes(props.city) ||
+			house.location.city.toLowerCase().includes(props.city)
+	);
+
+	console.log(recommendedHouses.value);
+});
 </script>
+
 <template>
 	<div v-if="recommendedHouses" class="house-item-container">
 		<h1 class="recommended-title">Recommended for you</h1>
@@ -140,6 +140,9 @@ a {
 	color: black;
 }
 @media (max-width: 767px) {
+	.container {
+		margin-top: 0;
+	}
 	.house-details h2 {
 		font-size: 16px;
 	}

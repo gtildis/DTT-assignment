@@ -33,6 +33,7 @@ const props = defineProps({
 	background-position: center;
 	display: flex;
 	justify-content: center;
+	margin-top: 2rem;
 }
 .form-container {
 	width: 70%;
@@ -45,9 +46,14 @@ const props = defineProps({
 
 @media (max-width: 767px) {
 	/* Styles for mobile */
+
+	.container {
+		margin-bottom: 6rem;
+		margin-top: 0;
+	}
 	.form-container {
 		width: 90%;
-		margin-bottom: 6rem;
+		/* margin-bottom: 6rem; */
 	}
 	.form-header {
 		display: flex;

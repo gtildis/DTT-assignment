@@ -272,6 +272,8 @@ const closeModal = () => {
 	align-items: center;
 	display: flex;
 	flex-direction: column;
+	padding-bottom: 2rem;
+	padding-top: 1rem;
 }
 
 .house-item-container {
@@ -348,13 +350,17 @@ h3 {
 
 @media (max-width: 767px) {
 	/* Styles for mobile */
+
+	.container {
+		margin-top: 0;
+	}
 	.sorting-container {
 		flex-direction: column;
 		width: 90%;
 	}
 
 	.house-list {
-		margin-bottom: 7.5rem;
+		margin-bottom: 5rem;
 	}
 
 	.desktop {
