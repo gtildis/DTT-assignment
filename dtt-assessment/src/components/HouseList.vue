@@ -1,28 +1,28 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import DeleteListing from "./DeleteListing.vue";
-
 import { useGlobalStore } from "../store/store";
 
 const globalStore = useGlobalStore();
-
 const searchInput = ref("");
-
+const sortType = ref("price");
 let isNotValid = ref(false);
 const currentHouseId = ref("");
 
 onMounted(() => {
 	globalStore.fetchHouses();
 });
+
 const houses = computed(() => globalStore.houses);
+const sortedHouses = ref([]);
 
 const searchResults = computed(() => {
 	if (searchInput.value) {
-		return houses.value.filter((house) =>
+		return sortedHouses.value.filter((house) =>
 			houseMatchesSearchCriteria(house, searchInput.value.toLowerCase())
 		);
 	} else {
-		return [];
+		return sortedHouses.value;
 	}
 });
 
@@ -39,32 +39,23 @@ function houseMatchesSearchCriteria(house, query) {
 		house.location.city.toLowerCase().includes(query)
 	);
 }
+
 const clearSearch = () => {
 	searchInput.value = "";
-};
-
-const sortType = ref("price");
-const sortOrder = ref("asc");
-
-const toggleSortOrder = () => {
-	sortOrder.value = sortOrder.value === "asc" ? "desc" : "asc";
+	sortHouses();
 };
 
 const sortHouses = () => {
-	const sortedHouses = [...houses.value];
+	const housesToSort = [...houses.value];
 
-	sortedHouses.sort((house1, house2) => {
+	housesToSort.sort((house1, house2) => {
 		const a = sortType.value === "price" ? house1.price : house1.size;
 		const b = sortType.value === "price" ? house2.price : house2.size;
 
-		if (sortOrder.value === "asc") {
-			return a - b;
-		} else {
-			return b - a;
-		}
+		return a - b;
 	});
 
-	searchResults.value = sortedHouses;
+	sortedHouses.value = housesToSort;
 };
 
 const showDeleteModal = ref(false);
@@ -128,20 +119,6 @@ const closeModal = () => {
 					:class="['segmented-button', { active: sortType === 'size' }]"
 				>
 					Size
-				</span>
-				<span
-					class="order"
-					@click="
-						toggleSortOrder();
-						sortHouses();
-					"
-					:class="[
-						'segmented-button',
-						'order',
-						{ active: sortOrder !== 'asc' },
-					]"
-				>
-					{{ sortOrder === "asc" ? "↑" : "↓" }}
 				</span>
 			</div>
 		</div>
@@ -230,6 +207,8 @@ const closeModal = () => {
 
 .btn-header-container span {
 	margin-right: 2rem;
+
+	font-size: 16px;
 }
 .header-container button {
 	display: flex;
@@ -542,11 +521,12 @@ img {
 	background-color: #ccc;
 	color: white;
 	border: none;
-	padding: 10px 20px;
+	padding: 10px 50px;
 	font-size: 16px;
 	cursor: pointer;
 	margin-top: 1rem;
 	transition: background-color 0.2s;
+	text-align: center;
 }
 
 .segmented-button:not(:last-child) {
@@ -561,7 +541,7 @@ img {
 	border-top-left-radius: 7px;
 	border-bottom-left-radius: 7px;
 }
-.order {
+.size {
 	border-bottom-right-radius: 7px;
 	border-top-right-radius: 7px;
 }
