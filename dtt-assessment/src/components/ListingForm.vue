@@ -1,35 +1,80 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, reactive, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { defineProps } from "vue";
 import { createListing, editListing } from "../services/listingService";
 import apiClient from "../services/api";
+import { useVuelidate } from "@vuelidate/core";
+import { required, helpers } from "@vuelidate/validators";
 
 const props = defineProps({
 	submitButtonText: String,
 	isEdit: Boolean,
 	listingId: String,
 });
-
-const streetName = ref("");
-const houseNumber = ref("");
-const numberAddition = ref("");
-const zip = ref("");
-const city = ref("");
-const description = ref("");
-const price = ref("");
-const size = ref("");
-const bedrooms = ref("");
-const bathrooms = ref("");
-const constructionYear = ref("");
-const hasGarage = ref(false);
-
-const previewImage = ref(null);
+const previewImage = ref("");
 
 const router = useRouter();
 const route = useRoute();
 
 const house = ref(null);
+
+const formData = reactive({
+	streetName: "",
+	houseNumber: "",
+	numberAddition: "",
+	zip: "",
+	city: "",
+	description: "",
+	price: "",
+	size: "",
+	bedrooms: "",
+	constructionYear: "",
+	hasGarage: "",
+});
+
+const rules = computed(() => {
+	return {
+		streetName: {
+			required: helpers.withMessage("Required missing field.", required),
+		},
+		houseNumber: {
+			required: helpers.withMessage("Required missing field.", required),
+		},
+		numberAddition: {
+			required: helpers.withMessage("Required missing field.", required),
+		},
+		zip: { required: helpers.withMessage("Required missing field.", required) },
+		city: {
+			required: helpers.withMessage("Required missing field.", required),
+		},
+		description: {
+			required: helpers.withMessage("Required missing field.", required),
+		},
+		price: {
+			required: helpers.withMessage("Required missing field.", required),
+		},
+		size: {
+			required: helpers.withMessage("Required missing field.", required),
+		},
+		bedrooms: {
+			required: helpers.withMessage("Required missing field.", required),
+		},
+		bathrooms: {
+			required: helpers.withMessage("Required missing field.", required),
+		},
+		constructionYear: {
+			required: helpers.withMessage("Required missing field.", required),
+		},
+		hasGarage: {
+			required: helpers.withMessage("Required missing field.", required),
+		},
+		previewImage: {
+			required: helpers.withMessage("Required missing field.", required),
+		},
+	};
+});
+const v$ = useVuelidate(rules, formData);
 
 if (props.isEdit) {
 	onMounted(async () => {
@@ -37,25 +82,24 @@ if (props.isEdit) {
 			const response = await apiClient.get(`/houses/${props.listingId}`);
 			house.value = response.data[0];
 			// Update the values cause isEdit
-			streetName.value = house.value.location.street;
-			houseNumber.value = house.value.location.houseNumber;
-			numberAddition.value = house.value.location.numberAddition;
-			zip.value = house.value.location.zip;
-			city.value = house.value.location.city;
-			description.value = house.value.description;
-			price.value = house.value.price;
-			size.value = house.value.size;
-			bedrooms.value = house.value.rooms.bedrooms;
-			bathrooms.value = house.value.rooms.bathrooms;
-			constructionYear.value = house.value.constructionYear;
-			hasGarage.value = house.value.hasGarage;
+			formData.streetName = house.value.location.street;
+			formData.houseNumber = house.value.location.houseNumber;
+			formData.numberAddition = house.value.location.numberAddition;
+			formData.zip = house.value.location.zip;
+			formData.city = house.value.location.city;
+			formData.description = house.value.description;
+			formData.price = house.value.price;
+			formData.size = house.value.size;
+			formData.bedrooms = house.value.rooms.bedrooms;
+			formData.bathrooms = house.value.rooms.bathrooms;
+			formData.constructionYear = house.value.constructionYear;
+			formData.hasGarage = house.value.hasGarage;
 			previewImage.value = house.value.image;
 		} catch (error) {
 			console.error("Error fetching house:", error);
 		}
 	});
-}
-if (previewImage.value !== "") {
+
 	const imageInput = document.getElementById("image-input");
 	if (imageInput) {
 		imageInput.style.backgroundImage = `url(${previewImage.value})`;
@@ -65,76 +109,63 @@ if (previewImage.value !== "") {
 }
 
 const handleSubmit = async () => {
-	try {
-		if (
-			!streetName.value ||
-			!houseNumber.value ||
-			!zip.value ||
-			!city.value ||
-			!description.value ||
-			!price.value ||
-			!size.value ||
-			!bedrooms.value ||
-			!bathrooms.value ||
-			!constructionYear.value
-		) {
-			console.error(
-				"Error importing data from form: Some required fields are missing."
-			);
-			return;
-		}
+	const result = await v$.value.$validate();
+	if (result) {
+		try {
+			const formDataObject = {
+				streetName: formData.streetName,
+				houseNumber: formData.houseNumber,
+				numberAddition: formData.numberAddition,
+				zip: formData.zip,
+				city: formData.city,
+				description: formData.description,
+				price: formData.price,
+				size: formData.size,
+				bedrooms: formData.bedrooms,
+				bathrooms: formData.bathrooms,
+				constructionYear: formData.constructionYear,
+				hasGarage: formData.hasGarage,
+			};
 
-		const formDataObject = {
-			streetName: streetName.value,
-			houseNumber: houseNumber.value,
-			numberAddition: numberAddition.value,
-			zip: zip.value,
-			city: city.value,
-			description: description.value,
-			price: price.value,
-			size: size.value,
-			bedrooms: bedrooms.value,
-			bathrooms: bathrooms.value,
-			constructionYear: constructionYear.value,
-			hasGarage: hasGarage.value,
-		};
+			console.log(formDataObject);
 
-		let response;
-		if (props.isEdit) {
-			response = await editListing(props.listingId, formDataObject);
-		} else {
-			response = await createListing(formDataObject);
-		}
-
-		const imageFile = document.getElementById("image-input").files[0];
-
-		if (previewImage) {
-			const formData = new FormData();
-			formData.append("image", imageFile);
-
+			let response;
 			if (props.isEdit) {
-				const uploadResponse = await apiClient.post(
-					`/houses/${props.listingId}/upload`,
-					formData
-				);
+				response = await editListing(props.listingId, formDataObject);
 			} else {
-				const uploadResponse = await apiClient.post(
-					`/houses/${response.id}/upload`,
-					formData
-				);
+				response = await createListing(formDataObject);
 			}
+
+			const imageFile = document.getElementById("image-input").files[0];
+
+			if (previewImage) {
+				const formData = new FormData();
+				formData.append("image", imageFile);
+
+				if (props.isEdit) {
+					const uploadResponse = await apiClient.post(
+						`/houses/${props.listingId}/upload`,
+						formData
+					);
+				} else {
+					const uploadResponse = await apiClient.post(
+						`/houses/${response.id}/upload`,
+						formData
+					);
+				}
+			}
+			if (props.isEdit) {
+				router.push({
+					path: `/houses/${route.params.listingId}`,
+				});
+			} else {
+				router.push({
+					path: `/houses/${response.id}`,
+				});
+			}
+		} catch (error) {
+			console.error("Error:", error);
 		}
-		if (props.isEdit) {
-			router.push({
-				path: `/houses/${route.params.listingId}`,
-			});
-		} else {
-			router.push({
-				path: `/houses/${response.id}`,
-			});
-		}
-	} catch (error) {
-		console.error("Error:", error);
 	}
 };
 
@@ -181,28 +212,46 @@ const clearImage = () => {
 			<div class="single">
 				<h4>Street name*</h4>
 				<input
-					v-model="streetName"
+					v-model="formData.streetName"
 					type="text"
 					class="input-field"
 					placeholder="Enter the street name"
-					required
+					:style="{
+						border: v$.streetName.$error ? '1px solid red' : 'none',
+					}"
+					:class="{ 'error-placeholder': v$.streetName.$error }"
 				/>
+				<span
+					v-for="error in v$.streetName.$errors"
+					:key="error.$uid"
+					class="error-message"
+					>{{ error.$message }}
+				</span>
 			</div>
 			<div class="double">
 				<div class="half">
 					<h4>House Number*</h4>
 					<input
-						v-model="houseNumber"
+						v-model="formData.houseNumber"
 						type="text"
 						class="input-field"
 						placeholder="Enter house number"
-						required
+						:style="{
+							border: v$.houseNumber.$error ? '1px solid red' : 'none',
+						}"
+						:class="{ 'error-placeholder': v$.houseNumber.$error }"
 					/>
+					<span
+						v-for="error in v$.houseNumber.$errors"
+						:key="error.$uid"
+						class="error-message"
+						>{{ error.$message }}
+					</span>
 				</div>
 				<div class="half">
 					<h4>Addition (optional)</h4>
 					<input
-						v-model="numberAddition"
+						v-model="formData.numberAddition"
 						type="text"
 						class="input-field"
 						placeholder="e.g A"
@@ -212,24 +261,42 @@ const clearImage = () => {
 			<div class="single">
 				<h4>Postal code*</h4>
 				<input
-					v-model="zip"
+					v-model="formData.zip"
 					type="text"
 					class="input-field"
 					placeholder="e.g 1000 AA"
-					required
+					:style="{
+						border: v$.zip.$error ? '1px solid red' : 'none',
+					}"
+					:class="{ 'error-placeholder': v$.zip.$error }"
 				/>
+				<span
+					v-for="error in v$.zip.$errors"
+					:key="error.$uid"
+					class="error-message"
+					>{{ error.$message }}
+				</span>
 			</div>
 			<div class="single">
 				<h4>City*</h4>
 				<input
-					v-model="city"
+					v-model="formData.city"
 					type="text"
 					class="input-field"
 					placeholder="e.g Utrecht"
-					required
+					:style="{
+						border: v$.city.$error ? '1px solid red' : 'none',
+					}"
+					:class="{ 'error-placeholder': v$.city.$error }"
 				/>
+				<span
+					v-for="error in v$.city.$errors"
+					:key="error.$uid"
+					class="error-message"
+					>{{ error.$message }}
+				</span>
 			</div>
-			<label>
+			<label v-if="props.isEdit" class="is - edit">
 				<div class="single">
 					<div class="half image-input-container">
 						<h4>Upload picture (PNG or JPG)*</h4>
@@ -239,15 +306,47 @@ const clearImage = () => {
 							type="file"
 							accept="image/*"
 							class="image-input"
-							required
 							:style="{
 								backgroundImage: previewImage
 									? `url(${previewImage})`
 									: `url('../assets/ic_upload@3x.png')`,
 								backgroundSize: 'cover',
-								border: 'none',
+								border: v$.previewImage.$error ? '1px solid red' : 'inherit',
 							}"
 						/>
+						<span
+							v-for="error in v$.previewImage.$errors"
+							:key="error.$uid"
+							class="error-message"
+							>{{ error.$message }}
+						</span>
+						<button
+							v-if="previewImage"
+							class="clear-button"
+							@click="clearImage"
+						>
+							x
+						</button>
+					</div>
+				</div>
+			</label>
+			<label v-else class="is-create">
+				<div class="single">
+					<div class="half image-input-container">
+						<h4>Upload picture (PNG or JPG)*</h4>
+						<input
+							@change="handleImageChange"
+							id="image-input"
+							type="file"
+							accept="image/*"
+							class="image-input"
+						/>
+						<span
+							v-for="error in v$.previewImage.$errors"
+							:key="error.$uid"
+							class="error-message"
+							>{{ error.$message }}
+						</span>
 						<button
 							v-if="previewImage"
 							class="clear-button"
@@ -261,27 +360,45 @@ const clearImage = () => {
 			<div class="single">
 				<h4>Price*</h4>
 				<input
-					v-model="price"
+					v-model="formData.price"
 					type="text"
 					class="input-field"
 					placeholder="e.g €150.000"
-					required
+					:style="{
+						border: v$.price.$error ? '1px solid red' : 'none',
+					}"
+					:class="{ 'error-placeholder': v$.price.$error }"
 				/>
+				<span
+					v-for="error in v$.price.$errors"
+					:key="error.$uid"
+					class="error-message"
+					>{{ error.$message }}
+				</span>
 			</div>
 			<div class="double">
 				<div class="half">
 					<h4>Size*</h4>
 					<input
-						v-model="size"
+						v-model="formData.size"
 						type="text"
 						class="input-field"
 						placeholder="e.g 60m2"
-						required
+						:style="{
+							border: v$.size.$error ? '1px solid red' : 'none',
+						}"
+						:class="{ 'error-placeholder': v$.size.$error }"
 					/>
+					<span
+						v-for="error in v$.size.$errors"
+						:key="error.$uid"
+						class="error-message"
+						>{{ error.$message }}
+					</span>
 				</div>
 				<div class="half">
 					<h4>Garage*</h4>
-					<select v-model="hasGarage" id="garage-select">
+					<select v-model="formData.hasGarage" id="garage-select">
 						<option value="" disabled>Select</option>
 						<option value="true">Yes</option>
 						<option value="false">No</option>
@@ -292,43 +409,79 @@ const clearImage = () => {
 				<div class="half">
 					<h4>Bedrooms*</h4>
 					<input
-						v-model="bedrooms"
+						v-model="formData.bedrooms"
 						type="text"
 						class="input-field"
 						placeholder="Enter amount"
-						required
+						:style="{
+							border: v$.bedrooms.$error ? '1px solid red' : 'none',
+						}"
+						:class="{ 'error-placeholder': v$.bedrooms.$error }"
 					/>
+					<span
+						v-for="error in v$.bedrooms.$errors"
+						:key="error.$uid"
+						class="error-message"
+						>{{ error.$message }}
+					</span>
 				</div>
 				<div class="half">
 					<h4>Bathrooms*</h4>
 					<input
-						v-model="bathrooms"
+						v-model="formData.bathrooms"
 						type="text"
 						class="input-field"
 						placeholder="Enter amount"
-						required
+						:style="{
+							border: v$.bathrooms.$error ? '1px solid red' : 'none',
+						}"
+						:class="{ 'error-placeholder': v$.bathrooms.$error }"
 					/>
+					<span
+						v-for="error in v$.bathrooms.$errors"
+						:key="error.$uid"
+						class="error-message"
+						>{{ error.$message }}
+					</span>
 				</div>
 			</div>
 			<div class="single">
 				<h4>Construction Date*</h4>
 				<input
-					v-model="constructionYear"
+					v-model="formData.constructionYear"
 					type="text"
 					class="input-field"
 					placeholder="e.g 1990"
-					required
+					:style="{
+						border: v$.constructionYear.$error ? '1px solid red' : 'none',
+					}"
+					:class="{ 'error-placeholder': v$.constructionYear.$error }"
 				/>
+				<span
+					v-for="error in v$.constructionYear.$errors"
+					:key="error.$uid"
+					class="error-message"
+					>{{ error.$message }}
+				</span>
 			</div>
 			<div class="single">
 				<h4>Description*</h4>
 				<textarea
-					v-model="description"
+					v-model="formData.description"
 					class="input-field"
 					placeholder="Enter description"
 					rows="5"
-					required
+					:style="{
+						border: v$.description.$error ? '1px solid red' : 'none',
+					}"
+					:class="{ 'error-placeholder': v$.description.$error }"
 				></textarea>
+				<span
+					v-for="error in v$.description.$errors"
+					:key="error.$uid"
+					class="error-message"
+					>{{ error.$message }}
+				</span>
 			</div>
 			<div class="double btn-container">
 				<button class="half button" type="submit">
@@ -340,6 +493,18 @@ const clearImage = () => {
 </template>
 
 <style scoped>
+.error-placeholder::placeholder {
+	color: red;
+}
+.error-message {
+	color: red;
+	font-size: 12px;
+	font-style: italic;
+}
+.error-border {
+	border: 1px solid red;
+}
+
 .form-container {
 	width: 35%;
 	color: #4a4b4c;
