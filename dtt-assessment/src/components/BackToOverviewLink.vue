@@ -41,6 +41,12 @@
 
 @media (max-width: 767px) {
 	/* Styles for mobile */
+
+	.back-to-overview {
+		position: absolute;
+		top: -0.5rem;
+		left: 0;
+	}
 	.back-to-overview span {
 		display: none;
 	}

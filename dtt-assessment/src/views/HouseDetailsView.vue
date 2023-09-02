@@ -18,7 +18,6 @@ onMounted(async () => {
 	await globalStore.fetchHouseDetails(houseId);
 
 	globalStore.city = computed(() => globalStore.houseDetails.location.city);
-	console.log(globalStore.city);
 });
 
 const showDeleteModal = ref(false);

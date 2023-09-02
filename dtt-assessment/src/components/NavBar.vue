@@ -1,8 +1,23 @@
 <script>
+import homeImageActive from "../assets/ic_mobile_navigarion_home_active@3x.png";
+import homeImage from "../assets/ic_mobile_navigarion_home@3x.png";
+import infoImageActive from "../assets/ic_mobile_navigarion_info_active@3x.png";
+import infoImage from "../assets/ic_mobile_navigarion_info@3x.png";
 export default {
+	data() {
+		return {
+			activeTab: "houses",
+		};
+	},
 	methods: {
-		isActive(route) {
-			return this.$route.path === route;
+		activateTab(tabName) {
+			this.activeTab = tabName;
+		},
+		getHomeImageSource() {
+			return this.activeTab === "houses" ? homeImageActive : homeImage;
+		},
+		getInfoImageSource() {
+			return this.activeTab === "about" ? infoImageActive : infoImage;
 		},
 	},
 };
@@ -11,34 +26,34 @@ export default {
 <template>
 	<header class="header">
 		<nav class="nav-container-mobile">
-			<div class="nav-image-mobile">
-				<router-link to="/" class="nav-link" v-if="isActive('/')">
-					<img
-						src="../assets/ic_mobile_navigarion_home_active@3x.png"
-						alt="Home logo"
-					/>
+			<ul class="nav-link-container">
+				<router-link to="/" class="nav-link">
+					<li>
+						<a
+							href="#"
+							@click="activateTab('houses')"
+							:class="{ active: activeTab === 'houses' }"
+						>
+							<slot name="houses">
+								<img :src="getHomeImageSource()" alt="Home logo"
+							/></slot>
+						</a>
+					</li>
 				</router-link>
-				<router-link to="/" class="nav-link" v-else>
-					<img
-						src="../assets/ic_mobile_navigarion_home@3x.png"
-						alt="Home logo"
-					/>
+				<router-link to="/about" class="nav-link">
+					<li>
+						<a
+							href="#"
+							@click="activateTab('about')"
+							:class="{ active: activeTab === 'about' }"
+						>
+							<slot name="about"
+								><img :src="getInfoImageSource()" alt="about logo"
+							/></slot>
+						</a>
+					</li>
 				</router-link>
-			</div>
-			<div class="nav-image-mobile">
-				<router-link to="/about" class="nav-link" v-if="isActive('/about')">
-					<img
-						src="../assets/ic_mobile_navigarion_info_active@3x.png"
-						alt="Info logo"
-					/>
-				</router-link>
-				<router-link to="/about" class="nav-link" v-else>
-					<img
-						src="../assets/ic_mobile_navigarion_info@3x.png"
-						alt="Info logo"
-					/>
-				</router-link>
-			</div>
+			</ul>
 		</nav>
 		<nav class="nav-container-desktop">
 			<div class="nav-desktop">
@@ -46,18 +61,30 @@ export default {
 					<img src="../assets/img_logo_dtt@3x.png" alt="DTT logo" />
 				</div>
 				<div class="nav-links">
-					<router-link
-						to="/"
-						class="nav-link"
-						:class="{ active: isActive('/') }"
-						>Houses</router-link
-					>
-					<router-link
-						to="/about"
-						class="nav-link"
-						:class="{ active: isActive('/about') }"
-						>About</router-link
-					>
+					<ul>
+						<router-link to="/">
+							<li>
+								<a
+									href="#"
+									@click="activateTab('houses')"
+									:class="{ active: activeTab === 'houses' }"
+								>
+									<slot name="houses">Houses</slot>
+								</a>
+							</li>
+						</router-link>
+						<router-link to="/about">
+							<li>
+								<a
+									href="#"
+									@click="activateTab('about')"
+									:class="{ active: activeTab === 'about' }"
+								>
+									<slot name="about">About</slot>
+								</a>
+							</li>
+						</router-link>
+					</ul>
 				</div>
 			</div>
 		</nav>
@@ -65,6 +92,36 @@ export default {
 </template>
 
 <style scoped>
+.navbar {
+	background-color: #ffffff;
+}
+
+ul {
+	list-style-type: none;
+	padding: 0;
+}
+
+li {
+	display: inline;
+	margin-right: 20px;
+}
+
+a {
+	font-family: "Montserrat", sans-serif;
+	text-decoration: none;
+	font-size: 18px;
+	color: #c3c3c3;
+	font-weight: 500;
+	padding-left: 2rem;
+	text-align: center;
+}
+
+a.active {
+	font-family: "Montserrat", sans-serif;
+	color: #000000;
+	font-weight: 900;
+}
+
 .nav-container-desktop {
 	position: fixed;
 	top: 0;
@@ -95,12 +152,6 @@ nav img {
 	padding-left: 3rem;
 }
 
-.nav-link.active {
-	font-family: "Montserrat", sans-serif;
-	color: #000000;
-	border-radius: 4px;
-	font-weight: 700;
-}
 @media (max-width: 768px) {
 	/* Styles for mobile */
 	.nav-container-mobile {
@@ -111,8 +162,13 @@ nav img {
 		background-color: #ffffff;
 		display: flex;
 		justify-content: space-between;
-		padding: 2rem;
 		z-index: 10;
+	}
+	.nav-link-container {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.nav-image-mobile {
@@ -130,6 +186,17 @@ nav img {
 		display: none;
 		z-index: 10;
 	}
+
+	nav img {
+		height: 3rem;
+	}
+	.nav-link {
+		padding-left: 0;
+		width: 100%;
+	}
+	.nav-link li a {
+		width: 100%;
+	}
 }
 
 /* Styles for desktop */
@@ -140,10 +207,6 @@ nav img {
 		display: flex;
 		align-items: center;
 		padding: 1rem 0;
-	}
-
-	nav img {
-		height: 3rem;
 	}
 
 	.nav-link {

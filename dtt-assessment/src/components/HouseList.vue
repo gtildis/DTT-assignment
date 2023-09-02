@@ -8,12 +8,13 @@ const searchInput = ref("");
 const sortType = ref("price");
 let isNotValid = ref(false);
 const currentHouseId = ref("");
+const houses = computed(() => globalStore.houses);
 
-onMounted(() => {
-	globalStore.fetchHouses();
+onMounted(async () => {
+	await globalStore.fetchHouses();
+	sortHouses();
 });
 
-const houses = computed(() => globalStore.houses);
 const sortedHouses = ref([]);
 
 const searchResults = computed(() => {
@@ -67,6 +68,7 @@ const openModal = (houseId) => {
 
 const closeModal = () => {
 	showDeleteModal.value = false;
+	window.location.reload();
 };
 </script>
 
@@ -124,12 +126,14 @@ const closeModal = () => {
 		</div>
 
 		<div class="results-container">
-			<div v-if="searchResults.length > 0" class="search-results">
+			<div
+				v-if="searchInput && searchResults.length > 0"
+				class="search-results"
+			>
 				<p>{{ searchResults.length }} results found</p>
 			</div>
 		</div>
 
-		<!-- <router-link :to="`/houses/${house.id}`"></router-link> -->
 		<div v-if="searchInput && searchResults.length === 0" class="no-results">
 			<img src="../assets/img_empty_houses@3x.png" alt="no results image" />
 			<p>No results found.</p>
@@ -354,6 +358,10 @@ h3 {
 		width: 100%;
 	}
 
+	.results-container {
+		width: 85%;
+	}
+
 	.button-group {
 		width: 100%;
 	}
@@ -380,11 +388,18 @@ h3 {
 	}
 
 	.header-title {
-		align-self: center;
+		width: 100%;
+		text-align: center;
 	}
 
 	.btn-header-container {
 		align-items: flex-end;
+		position: relative;
+	}
+	.btn-header-container img {
+		position: absolute;
+		top: -0.4rem;
+		right: 1rem;
 	}
 	.btn-header-container button span {
 		display: none;

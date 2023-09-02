@@ -50,12 +50,11 @@ import ListingForm from "../components/ListingForm.vue";
 	.form-header {
 		display: flex;
 		align-items: center;
+		justify-content: center;
+		position: relative;
 	}
 	.form-header h1 {
-		margin-left: 3rem;
-	}
-
-	.form-header h1 {
+		padding: 1rem;
 		font-size: 22px;
 		font-weight: 700;
 	}

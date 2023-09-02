@@ -53,19 +53,18 @@ const props = defineProps({
 	}
 	.form-container {
 		width: 90%;
-		/* margin-bottom: 6rem; */
 	}
 	.form-header {
 		display: flex;
 		align-items: center;
+		position: relative;
+		justify-content: center;
 	}
 	.form-header h1 {
-		margin-left: 4rem;
-	}
-
-	.form-header h1 {
+		padding: 1rem;
 		font-size: 22px;
 		font-weight: 700;
+		text-align: center;
 	}
 }
 </style>
