@@ -14,6 +14,9 @@ const recommendedHouses = computed(() =>
 
 <template>
 	<div class="recommended-houses">
+		<div class="recommended-title">
+			<h2>Recommended for you</h2>
+		</div>
 		<div v-for="house in recommendedHouses" class="house-item-container">
 			<router-link :to="`/houses/${house.id}`" class="house-item">
 				<img
@@ -72,6 +75,7 @@ const recommendedHouses = computed(() =>
 	font-family: "Montserrat", sans-serif;
 	font-size: 24px;
 	font-weight: bold;
+	margin-left: 4rem;
 }
 .house-details h2 {
 	font-size: 18px;
@@ -128,11 +132,25 @@ a {
 	color: black;
 }
 @media (max-width: 767px) {
+	.recommended-houses-container {
+		width: 100%;
+	}
+
+	.house-item-container {
+		margin: 0;
+		width: 100%;
+		align-items: center;
+		justify-content: center;
+	}
 	.recommended-houses {
 		margin-top: 0;
 	}
 	.container {
 		margin-top: 0;
+	}
+
+	.house-details {
+		width: 100%;
 	}
 	.house-details h2 {
 		font-size: 16px;
@@ -143,6 +161,8 @@ a {
 	}
 	.recommended-title {
 		font-size: 18px;
+		margin: 0;
+		text-align: center;
 	}
 }
 </style>

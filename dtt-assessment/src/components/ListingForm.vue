@@ -14,6 +14,7 @@ const props = defineProps({
 });
 const previewImage = ref("");
 
+const isFormSubmitAllowed = ref(false);
 const router = useRouter();
 const route = useRoute();
 
@@ -41,9 +42,6 @@ const rules = computed(() => {
 		houseNumber: {
 			required: helpers.withMessage("Required missing field.", required),
 		},
-		numberAddition: {
-			required: helpers.withMessage("Required missing field.", required),
-		},
 		zip: { required: helpers.withMessage("Required missing field.", required) },
 		city: {
 			required: helpers.withMessage("Required missing field.", required),
@@ -67,9 +65,6 @@ const rules = computed(() => {
 			required: helpers.withMessage("Required missing field.", required),
 		},
 		hasGarage: {
-			required: helpers.withMessage("Required missing field.", required),
-		},
-		previewImage: {
 			required: helpers.withMessage("Required missing field.", required),
 		},
 	};
@@ -110,6 +105,17 @@ if (props.isEdit) {
 
 const handleSubmit = async () => {
 	const result = await v$.value.$validate();
+
+	if (!isFormSubmitAllowed.value) {
+		const errorMessages = document.querySelectorAll(".error-message-image");
+
+		errorMessages.forEach((errorMessage) => {
+			errorMessage.style.display = "block";
+		});
+
+		return;
+	}
+
 	if (result) {
 		try {
 			const formDataObject = {
@@ -126,8 +132,6 @@ const handleSubmit = async () => {
 				constructionYear: formData.constructionYear,
 				hasGarage: formData.hasGarage,
 			};
-
-			console.log(formDataObject);
 
 			let response;
 			if (props.isEdit) {
@@ -174,8 +178,8 @@ const handleImageChange = (event) => {
 
 	if (file) {
 		previewImage.value = URL.createObjectURL(file);
+		isFormSubmitAllowed.value = true;
 
-		// Update the backgroundImage using DOM manipulation
 		const imageInput = document.getElementById("image-input");
 		if (imageInput) {
 			imageInput.style.backgroundImage = `url(${previewImage.value})`;
@@ -184,7 +188,7 @@ const handleImageChange = (event) => {
 		}
 	} else {
 		previewImage.value = "";
-
+		isFormSubmitAllowed.value = false;
 		const imageInput = document.getElementById("image-input");
 		if (imageInput) {
 			imageInput.style.backgroundImage = "url('../assets/ic_upload@3x.png')";
@@ -311,14 +315,10 @@ const clearImage = () => {
 									? `url(${previewImage})`
 									: `url('../assets/ic_upload@3x.png')`,
 								backgroundSize: 'cover',
-								border: v$.previewImage.$error ? '1px solid red' : 'inherit',
 							}"
 						/>
-						<span
-							v-for="error in v$.previewImage.$errors"
-							:key="error.$uid"
-							class="error-message"
-							>{{ error.$message }}
+						<span class="error-message-image error-message"
+							>Required missing field
 						</span>
 						<button
 							v-if="previewImage"
@@ -341,11 +341,8 @@ const clearImage = () => {
 							accept="image/*"
 							class="image-input"
 						/>
-						<span
-							v-for="error in v$.previewImage.$errors"
-							:key="error.$uid"
-							class="error-message"
-							>{{ error.$message }}
+						<span class="error-message-image error-message"
+							>Required missing field
 						</span>
 						<button
 							v-if="previewImage"
@@ -501,6 +498,10 @@ const clearImage = () => {
 	font-size: 12px;
 	font-style: italic;
 }
+.error-message-image {
+	display: none;
+}
+
 .error-border {
 	border: 1px solid red;
 }

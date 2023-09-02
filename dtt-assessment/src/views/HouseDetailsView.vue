@@ -7,7 +7,6 @@ import DeleteListing from "../components/DeleteListing.vue";
 import { useGlobalStore } from "../store/store";
 
 const globalStore = useGlobalStore();
-const router = useRouter();
 const route = useRoute();
 const currentHouseId = ref(null);
 
@@ -16,7 +15,6 @@ const house = computed(() => globalStore.houseDetails);
 
 onMounted(async () => {
 	await globalStore.fetchHouseDetails(houseId);
-
 	globalStore.city = computed(() => globalStore.houseDetails.location.city);
 });
 
@@ -113,7 +111,7 @@ const closeModal = () => {
 				</div>
 			</div>
 			<div class="recommended-houses-container">
-				<RecommendedHouses :city="city" />
+				<RecommendedHouses />
 			</div>
 		</div>
 		<DeleteListing
@@ -283,7 +281,8 @@ button {
 		border-top-right-radius: 10px;
 	}
 	.recommended-houses-container {
-		width: 90%;
+		width: 100%;
+		margin-bottom: 5rem;
 	}
 	.house-item-container {
 		width: 100%;

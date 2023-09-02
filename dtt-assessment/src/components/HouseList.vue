@@ -2,6 +2,8 @@
 import { ref, onMounted, computed } from "vue";
 import DeleteListing from "./DeleteListing.vue";
 import { useGlobalStore } from "../store/store";
+import SortingOptions from "./SortingOptions.vue";
+import SearchBar from "./SearchBar.vue";
 
 const globalStore = useGlobalStore();
 const searchInput = ref("");
@@ -70,6 +72,16 @@ const closeModal = () => {
 	showDeleteModal.value = false;
 	window.location.reload();
 };
+
+const updateSortType = (type) => {
+	sortType.value = type;
+	sortHouses();
+};
+
+const updateSearchInput = (input) => {
+	searchInput.value = input;
+	sortHouses();
+};
 </script>
 
 <template>
@@ -89,40 +101,12 @@ const closeModal = () => {
 			</div>
 		</div>
 		<div class="sorting-container">
-			<div class="search-container">
-				<img src="../assets/ic_search@3x.png" alt="search icon" />
-				<input
-					v-model="searchInput"
-					placeholder="Search for a house"
-					class="input-search"
-				/>
-				<button @click="clearSearch">
-					<img src="../assets/ic_clear@3x.png" alt="clear icon" />
-				</button>
-			</div>
+			<SearchBar
+				:searchInput="searchInput"
+				@update:searchInput="updateSearchInput"
+			/>
 
-			<div class="button-group">
-				<span
-					class="price"
-					@click="
-						sortType = 'price';
-						sortHouses();
-					"
-					:class="['segmented-button', { active: sortType === 'price' }]"
-				>
-					Price
-				</span>
-				<span
-					class="size"
-					@click="
-						sortType = 'size';
-						sortHouses();
-					"
-					:class="['segmented-button', { active: sortType === 'size' }]"
-				>
-					Size
-				</span>
-			</div>
+			<SortingOptions :sortType="sortType" @update:sortType="updateSortType" />
 		</div>
 
 		<div class="results-container">
@@ -228,7 +212,7 @@ const closeModal = () => {
 .header-container button img {
 	margin-right: 8px;
 	width: 18px;
-	padding: 0.5rem 1rem;
+	padding: 1rem 1rem;
 }
 .mobile {
 	display: none;
@@ -351,7 +335,6 @@ h3 {
 	}
 	.mobile {
 		display: block;
-		/* background-color: #c3c3c3; */
 	}
 
 	.search-container {
@@ -367,24 +350,15 @@ h3 {
 	}
 	.header-container button img {
 		margin-right: 0;
+		padding: 0 1rem;
 	}
 	.header-container button {
 		background-color: transparent;
-	}
-	.price {
-		flex-grow: 1;
-	}
-	.size {
-		flex-grow: 1;
 	}
 
 	.header-container {
 		justify-content: space-between;
 		width: 85%;
-	}
-	.helper {
-		justify-content: center;
-		flex-grow: 1;
 	}
 
 	.header-title {
@@ -448,7 +422,6 @@ h3 {
 
 	h2 {
 		font-size: 16px;
-		/* letter-spacing: 1px; */
 	}
 
 	h3 {
@@ -458,41 +431,10 @@ h3 {
 
 /* search bar */
 
-.search-container {
-	margin-top: 1rem;
-	display: flex;
-	border-radius: 7px;
-	align-items: center;
-	justify-content: space-between;
-	background-color: #e8e8e8;
-	color: #c3c3c3;
-}
-
-input {
-	flex-grow: 3;
-	margin: 0 0.5rem;
-	padding: 0.5rem;
-	border: none;
-	background-color: #e8e8e8;
-}
-
-.input-search {
-	border: none;
-	outline: none;
-}
-
-button {
-	border: none;
-	align-self: flex-end;
-	cursor: pointer;
-	padding: 0.5rem;
-	background-color: #e8e8e8;
-	border-radius: 7px;
-}
-
 .button-group button {
 	background-color: #ffffff;
 	margin: 1rem 0;
+	border: none;
 }
 
 .search-results {
@@ -530,34 +472,5 @@ img {
 	justify-content: center;
 	font-family: "Montserrat", sans-serif;
 	font-weight: 600;
-}
-
-.segmented-button {
-	background-color: #ccc;
-	color: white;
-	border: none;
-	padding: 10px 50px;
-	font-size: 16px;
-	cursor: pointer;
-	margin-top: 1rem;
-	transition: background-color 0.2s;
-	text-align: center;
-}
-
-.segmented-button:not(:last-child) {
-	margin-right: -1px; /* Overlap adjacent buttons slightly */
-}
-
-.active {
-	background-color: #eb5440;
-}
-
-.price {
-	border-top-left-radius: 7px;
-	border-bottom-left-radius: 7px;
-}
-.size {
-	border-bottom-right-radius: 7px;
-	border-top-right-radius: 7px;
 }
 </style>
