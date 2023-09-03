@@ -91,7 +91,7 @@ const closeModal = () => {
 						</div>
 						<p class="description">{{ house.description }}</p>
 
-						<div class="button-group">
+						<div v-if="house.madeByMe" class="button-group">
 							<router-link :to="`/edit-listing/${house.id}`">
 								<img src="../assets/ic_edit@3x.png" alt="edit icon" />
 							</router-link>
@@ -99,7 +99,7 @@ const closeModal = () => {
 								<img src="../assets/ic_delete@3x.png" alt="delete icon" />
 							</button>
 						</div>
-						<div class="button-group-mobile">
+						<div v-if="house.madeByMe" class="button-group-mobile">
 							<router-link :to="`/edit-listing/${house.id}`">
 								<img src="../assets/ic_edit_white@3x.png" alt="edit icon" />
 							</router-link>
