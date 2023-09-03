@@ -1,6 +1,6 @@
 import apiClient from "../services/api";
 
-// Function to create a new listing
+
 async function createListing(formData) {
 	try {
 		const response = await apiClient.post("/houses", formData);
@@ -11,7 +11,7 @@ async function createListing(formData) {
 	}
 }
 
-// Function to edit an existing listing
+
 async function editListing(listingId, formData) {
 	try {
 		const response = await apiClient.post(`/houses/${listingId}`, formData);

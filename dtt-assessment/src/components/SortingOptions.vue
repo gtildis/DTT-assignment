@@ -82,5 +82,5 @@ button {
 		flex-grow: 1;
 	}
 }
-/* Add your CSS styling for SortingOptions here */
+
 </style>
