@@ -69,6 +69,7 @@ const rules = computed(() => {
 		},
 	};
 });
+
 const v$ = useVuelidate(rules, formData);
 
 if (props.isEdit) {
@@ -76,7 +77,7 @@ if (props.isEdit) {
 		try {
 			const response = await apiClient.get(`/houses/${props.listingId}`);
 			house.value = response.data[0];
-			// Update the values cause isEdit
+
 			formData.streetName = house.value.location.street;
 			formData.houseNumber = house.value.location.houseNumber;
 			formData.numberAddition = house.value.location.numberAddition;
@@ -96,6 +97,7 @@ if (props.isEdit) {
 	});
 
 	const imageInput = document.getElementById("image-input");
+
 	if (imageInput) {
 		imageInput.style.backgroundImage = `url(${previewImage.value})`;
 		imageInput.style.backgroundSize = "cover";
@@ -105,6 +107,10 @@ if (props.isEdit) {
 
 const handleSubmit = async () => {
 	const result = await v$.value.$validate();
+
+	if (previewImage.value !== "") {
+		isFormSubmitAllowed.value = true;
+	}
 
 	if (!isFormSubmitAllowed.value) {
 		const errorMessages = document.querySelectorAll(".error-message-image");
@@ -300,57 +306,62 @@ const clearImage = () => {
 					>{{ error.$message }}
 				</span>
 			</div>
-			<label v-if="props.isEdit" class="is - edit">
+			<label v-if="props.isEdit">
 				<div class="single">
-					<div class="half image-input-container">
+					<div>
 						<h4>Upload picture (PNG or JPG)*</h4>
-						<input
-							@change="handleImageChange"
-							id="image-input"
-							type="file"
-							accept="image/*"
-							class="image-input"
-							:style="{
-								backgroundImage: previewImage
-									? `url(${previewImage})`
-									: `url('../assets/ic_upload@3x.png')`,
-								backgroundSize: 'cover',
-							}"
-						/>
+						<div class="image-input-container">
+							<input
+								@change="handleImageChange"
+								id="image-input"
+								type="file"
+								accept="image/*"
+								class="image-input"
+								:style="{
+									backgroundImage: previewImage
+										? `url(${previewImage})`
+										: `url('../assets/ic_upload@3x.png')`,
+									backgroundSize: 'cover',
+								}"
+							/>
+							<button
+								v-if="previewImage"
+								class="clear-button"
+								@click="clearImage"
+							>
+								x
+							</button>
+						</div>
 						<span class="error-message-image error-message"
 							>Required missing field
 						</span>
-						<button
-							v-if="previewImage"
-							class="clear-button"
-							@click="clearImage"
-						>
-							x
-						</button>
 					</div>
 				</div>
 			</label>
-			<label v-else class="is-create">
+			<label v-else>
 				<div class="single">
-					<div class="half image-input-container">
+					<div>
 						<h4>Upload picture (PNG or JPG)*</h4>
-						<input
-							@change="handleImageChange"
-							id="image-input"
-							type="file"
-							accept="image/*"
-							class="image-input"
-						/>
+						<div class="image-input-container">
+							<input
+								@change="handleImageChange"
+								id="image-input"
+								type="file"
+								accept="image/*"
+								class="image-input"
+							/>
+
+							<button
+								v-if="previewImage"
+								class="clear-button"
+								@click="clearImage"
+							>
+								x
+							</button>
+						</div>
 						<span class="error-message-image error-message"
 							>Required missing field
 						</span>
-						<button
-							v-if="previewImage"
-							class="clear-button"
-							@click="clearImage"
-						>
-							x
-						</button>
 					</div>
 				</div>
 			</label>
@@ -400,6 +411,12 @@ const clearImage = () => {
 						<option value="true">Yes</option>
 						<option value="false">No</option>
 					</select>
+					<span
+						v-for="error in v$.hasGarage.$errors"
+						:key="error.$uid"
+						class="error-message"
+						>{{ error.$message }}
+					</span>
 				</div>
 			</div>
 			<div class="double">
@@ -560,11 +577,12 @@ const clearImage = () => {
 
 .image-input-container {
 	position: relative;
+	display: inline-block;
 }
 .clear-button {
 	position: absolute;
-	top: 3.5rem;
-	right: 2rem;
+	top: 0rem;
+	right: 0rem;
 	width: 20px;
 	height: 20px;
 	background-color: #ccc;
@@ -622,11 +640,6 @@ h4 {
 	.single textarea,
 	.double select {
 		margin-right: 1rem;
-	}
-	.clear-button {
-		position: absolute;
-		top: 4rem;
-		right: -1rem;
 	}
 }
 </style>
