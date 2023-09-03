@@ -33,7 +33,7 @@ const deleteListing = async () => {
 	<div class="modal-overlay">
 		<div class="modal">
 			<div class="modal-details">
-				<h2>Delete Listing</h2>
+				<h2>Delete listing</h2>
 				<p>Are you sure you want to delete this listing?</p>
 				<p>This action cannot be undone.</p>
 				<div class="modal-buttons">
@@ -41,7 +41,7 @@ const deleteListing = async () => {
 						YES, DELETE
 					</button>
 					<button @click="closeDeleteModal" class="cancel-button">
-						CANCEL
+						GO BACK
 					</button>
 				</div>
 			</div>
