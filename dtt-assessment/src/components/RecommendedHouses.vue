@@ -1,8 +1,9 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
-
+import { ref, onMounted, computed, watch } from "vue";
+import { useRoute } from "vue-router";
 import { useGlobalStore } from "../store/store";
 
+const route = useRoute();
 const globalStore = useGlobalStore();
 
 const recommendedHouses = computed(() =>
@@ -18,7 +19,7 @@ const recommendedHouses = computed(() =>
 			<h2>Recommended for you</h2>
 		</div>
 		<div v-for="house in recommendedHouses" class="house-item-container">
-			<router-link :to="`/houses/${house.id}`" class="house-item">
+			<div class="house-item">
 				<img
 					:src="house.image"
 					:alt="house.address"
@@ -44,7 +45,7 @@ const recommendedHouses = computed(() =>
 						<h3>{{ house.size }} m2</h3>
 					</div>
 				</div>
-			</router-link>
+			</div>
 		</div>
 	</div>
 </template>
