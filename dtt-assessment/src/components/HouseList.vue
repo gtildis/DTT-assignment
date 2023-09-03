@@ -39,6 +39,8 @@ function houseMatchesSearchCriteria(house, query) {
 	return (
 		house.location.street.toLowerCase().includes(query) ||
 		house.location.zip.toLowerCase().includes(query) ||
+		String(house.size).toLowerCase().includes(query) ||
+		String(house.price).toLowerCase().includes(query) ||
 		house.location.city.toLowerCase().includes(query)
 	);
 }

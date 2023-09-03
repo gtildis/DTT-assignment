@@ -30,26 +30,24 @@ export default {
 				<router-link to="/" class="nav-link">
 					<li>
 						<a
-							href="#"
 							@click="activateTab('houses')"
 							:class="{ active: activeTab === 'houses' }"
 						>
 							<slot name="houses">
-								<img :src="getHomeImageSource()" alt="Home logo"
-							/></slot>
+								<img :src="getHomeImageSource()" alt="Home logo" />
+							</slot>
 						</a>
 					</li>
 				</router-link>
 				<router-link to="/about" class="nav-link">
 					<li>
 						<a
-							href="#"
 							@click="activateTab('about')"
 							:class="{ active: activeTab === 'about' }"
 						>
-							<slot name="about"
-								><img :src="getInfoImageSource()" alt="about logo"
-							/></slot>
+							<slot name="about">
+								<img :src="getInfoImageSource()" alt="about logo" />
+							</slot>
 						</a>
 					</li>
 				</router-link>
@@ -65,7 +63,6 @@ export default {
 						<router-link to="/">
 							<li>
 								<a
-									href="#"
 									@click="activateTab('houses')"
 									:class="{ active: activeTab === 'houses' }"
 								>
@@ -76,7 +73,6 @@ export default {
 						<router-link to="/about">
 							<li>
 								<a
-									href="#"
 									@click="activateTab('about')"
 									:class="{ active: activeTab === 'about' }"
 								>
@@ -92,10 +88,6 @@ export default {
 </template>
 
 <style scoped>
-.navbar {
-	background-color: #ffffff;
-}
-
 ul {
 	list-style-type: none;
 	padding: 0;
@@ -146,7 +138,6 @@ nav img {
 .nav-link {
 	text-decoration: none;
 	font-size: 18px;
-	padding: 5px 10px;
 	color: #c3c3c3;
 	font-weight: 500;
 	padding-left: 3rem;

@@ -502,10 +502,6 @@ const clearImage = () => {
 	display: none;
 }
 
-.error-border {
-	border: 1px solid red;
-}
-
 .form-container {
 	width: 35%;
 	color: #4a4b4c;
@@ -558,7 +554,6 @@ const clearImage = () => {
 	display: none;
 }
 
-/* Optional: Style the dashed border when hovering */
 #image-input:hover {
 	border-color: #555;
 }
